@@ -41,10 +41,11 @@ const App = () => {
     <SafeAreaView style={styles.container}>
       <View style={styles.heartRateTitleWrapper}>
         {connectedDevice ? (
+
           <>
-            <Text>Pulse indicator</Text>
-            <Text style={styles.heartRateTitleText}>Your Heart Rate Is:</Text>
-            <Text style={styles.heartRateText}>{galileo} bpm</Text>
+            <Text>Galileosky BLE</Text>
+            <Text style={styles.heartRateTitleText}>Dados do coletor</Text>
+            <Text style={styles.heartRateText}>{galileo} km/h</Text>
           </>
         ) : (
           <Text style={styles.heartRateTitleText}>

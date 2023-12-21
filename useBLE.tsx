@@ -11,8 +11,30 @@ import * as ExpoDevice from "expo-device";
 
 import base64 from "react-native-base64";
 
-const HEART_RATE_UUID = "0000180d-0000-1000-8000-00805f9b34fb";
-const HEART_RATE_CHARACTERISTIC = "00002a37-0000-1000-8000-00805f9b34fb";
+const HEART_RATE_UUID = "0000180d-0000-1000-8000-00805f9b34fb"; // SERVICE UUID
+const HEART_RATE_CHARACTERISTIC = "00002a37-0000-1000-8000-00805f9b34fb"; // NOTIFY
+
+const GALILEOSKY_READ_UUID = "0783b03e8535b5a07140a304d2495cb7"; //SPS
+const GALILEOSKY_NOTIFY_UUID = "0783b03e8535b5a07140a304d2495cb8"; //SERVER_TX, 250B, Cliente deve assinar SERVER_TX para receber mensagens
+const GALILEOSKY_WRITENORESPONSE_UUID = "0783b03e8535b5a07140a304d2495cba"; //SERVER_RX, 250B, Cliente deve assinar SERVER_RX para enviar mensagens
+const GALILEOSKY_WRITENORESPONSE_NOTIFY_UUID = "0783b03e8535b5a07140a304d2495cb9"; //FLOW_CTRL, 1B, não é usado
+
+const NOTIFY_UUID = GALILEOSKY_NOTIFY_UUID;
+const READ_UUID = GALILEOSKY_READ_UUID;
+const WRITE_UUID = GALILEOSKY_WRITENORESPONSE_UUID;
+
+/****** Formato da mensagem / 250 bytes *******
+| Byte nº | Length | Value |    Descrição     |
+-----------------------------------------------
+|   1     |    1   | 0x41  |                  |
+|   2     |    1   | 0xA4  | Cabeçalho da     |
+|   3     |    1   | 0x12  | Mensagem         |
+|   4     |    1   | 0x21  |                  |
+|  ...    |   ...  |       | Pacote principal |
+|   n     |   15   | 0x03  |    IMEI          |
+|  ...    |   ...  |       | Pacote principal |
+-----------------------------------------------
+*/
 
 interface BluetoothLowEnergyApi {
     requestPermissions(): Promise<boolean>;
@@ -97,7 +119,7 @@ function useBLE(): BluetoothLowEnergyApi {
             }
             if (device && device.id?.includes("80:EA:CA:00:1E:43")) {
             // if (device) {
-                console.log(device)  
+                console.log(device.localName)  
                 setAllDevices((prevState: Device[]) => {
                     if (!isDuplicateDevice(prevState, device)) {
                         return [...prevState, device];
@@ -158,8 +180,8 @@ function useBLE(): BluetoothLowEnergyApi {
     const startStreamingData = async (device: Device) => {
         if (device) {
             device.monitorCharacteristicForService(
-                HEART_RATE_UUID,
-                HEART_RATE_CHARACTERISTIC,
+                READ_UUID,
+                NOTIFY_UUID,
                 onHeartRateUpdate
             );
         } else {

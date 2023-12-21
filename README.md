@@ -26,6 +26,7 @@ sendo estes responsáveis por enviar pacotes de dados ao celular e apresentá-lo
 
 - Versão BETA da aplicação: [Link](https://expo.dev/accounts/ble-user-gustavo/projects/expo-ble-darwin/builds/c79fbe0b-f4b0-4a18-a9f0-939d202825b2)
 - Documentação Galileosky sobre BLE: [Link](https://base.galileosky.com/articles/#!en-documentation/developing-a-mobile-app-for-interacting-with-galileosky-tracking-devices-via-bluetooth/q/bluetooth/qid/13193/qp/4)
+- Documentação protocolo Galileosky: [Link](https://base.galileosky.com/articles/#!en-documentation/galileosky-protocol/a/h2_1310565463)
 - Github lib RN BLE plx: [Link](https://github.com/dotintent/react-native-ble-plx)
 - Documentação lib RN BLE plx: [Link](https://github.com/dotintent/react-native-ble-plx)
   
