@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   SafeAreaView,
   StyleSheet,
@@ -8,16 +8,19 @@ import {
 } from "react-native";
 import DeviceModal from "./DeviceConnectionModal";
 import useBLE from "./useBLE";
+import useParsepacket from "./useParsepacket";
 
 const App = () => {
+  const { handleRecvPkg, outParsedPkg } = useParsepacket();
   const {
     requestPermissions,
     scanForPeripherals,
     allDevices,
     connectToDevice,
     connectedDevice,
-    galileo,
+    galileoDataBuffer,
     disconnectFromDevice,
+    size,
   } = useBLE();
   const [isModalVisible, setIsModalVisible] = useState<boolean>(false);
 
@@ -37,6 +40,15 @@ const App = () => {
     setIsModalVisible(true);
   };
 
+  useEffect(() => {
+    if (galileoDataBuffer.length > 4) {
+      const galileoPktSize = galileoDataBuffer.readUInt16LE(5)
+      if (galileoPktSize === (size - 9)) {
+        handleRecvPkg(galileoDataBuffer);
+      }
+    }
+  }, [size])
+
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.heartRateTitleWrapper}>
@@ -45,7 +57,8 @@ const App = () => {
           <>
             <Text>Galileosky BLE</Text>
             <Text style={styles.heartRateTitleText}>Dados do coletor</Text>
-            <Text style={styles.heartRateText}>{galileo} km/h</Text>
+            <Text style={styles.heartRateText}>{galileoDataBuffer}</Text>
+            <Text style={styles.heartRateText}>{outParsedPkg.hdop}</Text>
           </>
         ) : (
           <Text style={styles.heartRateTitleText}>
@@ -89,7 +102,12 @@ const styles = StyleSheet.create({
     color: "black",
   },
   heartRateText: {
-    fontSize: 25,
+    fontSize: 12,
+    marginTop: 15,
+    marginHorizontal: 10,
+  },
+  heartRateTextSecond: {
+    fontSize: 12,
     marginTop: 15,
   },
   ctaButton: {
