@@ -9,6 +9,10 @@ import {
 import DeviceModal from "./DeviceConnectionModal";
 import useBLE from "./useBLE";
 import useParsepacket from "./useParsepacket";
+import dayjs from 'dayjs'
+import ptBr from 'dayjs/locale/pt-br'
+
+dayjs.locale(ptBr)
 
 const App = () => {
   const { handleRecvPkg, outParsedPkg } = useParsepacket();
@@ -53,12 +57,30 @@ const App = () => {
     <SafeAreaView style={styles.container}>
       <View style={styles.heartRateTitleWrapper}>
         {connectedDevice ? (
-
           <>
             <Text>Galileosky BLE</Text>
             <Text style={styles.heartRateTitleText}>Dados do coletor</Text>
-            <Text style={styles.heartRateText}>{galileoDataBuffer}</Text>
-            <Text style={styles.heartRateText}>{outParsedPkg.hdop}</Text>
+            {
+              outParsedPkg.imei ? (<Text style={styles.heartRateTitleTextSnd}>{outParsedPkg.imei}</Text>) :
+              (<Text>...</Text>)
+            }
+            
+            {/* <Text style={styles.heartRateText}>{galileoDataBuffer}</Text>
+            <Text style={styles.heartRateText}>TAMANHO: {size}</Text> */}
+            <Text style={styles.heartRateText}>FIRMWARE: {outParsedPkg.firmwareVersion}</Text>
+            <Text style={styles.heartRateText}>HARDWARE: {outParsedPkg.hardwareVersion}</Text>
+            <Text style={styles.heartRateText}>RECEIVED: {outParsedPkg.receivedTimestamp}</Text>
+            <Text style={styles.heartRateText}>NAVIGATION: {outParsedPkg.navigationTimestamp}</Text>
+            {/* <Text style={styles.heartRateText}>LATITUDE: {outParsedPkg.latitude}</Text>
+            <Text style={styles.heartRateText}>LONGITUDE: {outParsedPkg.longitude}</Text>
+            <Text style={styles.heartRateText}>BATERIA: {outParsedPkg.batteryVoltage}</Text>
+            <Text style={styles.heartRateText}>FONTE: {outParsedPkg.supplyVoltage}</Text>
+            <Text style={styles.heartRateText}>ALTITUDE: {outParsedPkg.height}</Text>
+            <Text style={styles.heartRateText}>HDOP: {outParsedPkg.hdop}</Text>
+            <Text style={styles.heartRateText}>TEMPERATURA: {outParsedPkg.temperature}</Text>
+            <Text style={styles.heartRateText}>VELOCIDADE: {outParsedPkg.speed} Km/h</Text>
+            <Text style={styles.heartRateText}>PACOTE: {outParsedPkg.packetID}</Text>
+            <Text style={styles.heartRateText}>ENTRADA 3: {outParsedPkg.inputVoltage3}</Text> */}
           </>
         ) : (
           <Text style={styles.heartRateTitleText}>
@@ -101,14 +123,21 @@ const styles = StyleSheet.create({
     marginHorizontal: 20,
     color: "black",
   },
+  heartRateTitleTextSnd: {
+    fontSize: 20, 
+    marginTop: 5,
+    textAlign: "center",
+    marginHorizontal: 20,
+    color: "black",
+    backgroundColor: '#D3D3D3',
+    padding: 10,
+    borderRadius: 10,
+  },
   heartRateText: {
     fontSize: 12,
     marginTop: 15,
     marginHorizontal: 10,
-  },
-  heartRateTextSecond: {
-    fontSize: 12,
-    marginTop: 15,
+    display: 'flex',
   },
   ctaButton: {
     backgroundColor: "#FF6060",

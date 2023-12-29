@@ -17,8 +17,35 @@ class GalileoParsePacket {
     course: number;
     anSensors: AnSensor[];
     liquidSensors: LiquidSensor[];
+    hardwareVersion: number;
+    firmwareVersion: number;
+    imei: string;
+    height: number;
+    deviceStatus: number;
+    supplyVoltage: number;
+    batteryVoltage: number;
+    temperature: number;
+    accelX: number;
+    accelY: number;
+    accelZ: number;
+    outputStatus: number;
+    inputStatus: number;
+    inputVoltage0: number;
+    inputVoltage1: number;
+    inputVoltage2: number;
+    inputVoltage3: number;
+    inputVoltage4: number;
+    inputVoltage5: number;
+    inputVoltage6: number;
+    inputVoltage7: number;
+    rs485a: number;
+    rs485b: number;
+    rs485c: number;
 
     constructor() {
+        this.hardwareVersion = 0;
+        this.firmwareVersion = 0;
+        this.imei = "";
         this.client = 0;
         this.packetID = 0;
         this.navigationTimestamp = 0;
@@ -26,12 +53,33 @@ class GalileoParsePacket {
         this.latitude = 0.0;
         this.longitude = 0.0;
         this.speed = 0;
+        this.height = 0;
+        this.deviceStatus = 0;
+        this.supplyVoltage = 0;
+        this.batteryVoltage = 0;
+        this.temperature = 0;
+        this.accelX = 0;
+        this.accelY = 0;
+        this.accelZ = 0;
         this.pdop = 0;
         this.hdop = 0;
         this.vdop = 0;
         this.nsat = 0;
         this.ns = 0;
         this.course = 0;
+        this.outputStatus = 0;
+        this.inputStatus = 0;
+        this.inputVoltage0 = 0;
+        this.inputVoltage1 = 0;
+        this.inputVoltage2 = 0;
+        this.inputVoltage3 = 0;
+        this.inputVoltage4 = 0;
+        this.inputVoltage5 = 0;
+        this.inputVoltage6 = 0;
+        this.inputVoltage7 = 0;
+        this.rs485a = 0;
+        this.rs485b = 0;
+        this.rs485c = 0;
         this.anSensors = [];
         this.liquidSensors = [];
     }
@@ -109,9 +157,9 @@ class Tag {
             return new Error("Ponteiro de tag inválido");
         }
 
-        try{
+        try {
             v.parse(val);
-        } catch (error){
+        } catch (error) {
             return error;
         }
 
@@ -159,7 +207,7 @@ class StringTag {
 
 class TimeTag {
     val: Date;
-    
+
     constructor(val = new Date()) {
         this.val = val;
     }
@@ -306,57 +354,57 @@ function useParsepacket(): ParsePacketApi {
         length: number;
         tags: Tag[];
         crc: number;
-    
+
         constructor() {
             this.header = 0;
             this.length = 0;
             this.tags = [];
             this.crc = 0;
         }
-    
+
         decode(pkg: Buffer) {
             if (!Buffer.isBuffer(pkg)) {
                 pkg = Buffer.from(pkg);
             }
-    
+
             let pos = 0;
             const paketBodyLen = pkg.length - 2; // sem o checksum
-    
+
             // Lê e verifica o CRC
             this.crc = pkg.readUInt16LE(paketBodyLen);
             if (crc16(pkg.slice(0, paketBodyLen)) !== this.crc) {
                 throw new Error("Crc do pacote não corresponde");
             }
-    
+
             // Lê o cabeçalho
             this.header = pkg.readUInt8(pos);
             pos++;
-    
+
             // Lê o comprimento
             this.length = pkg.readUInt16LE(pos);
             pos += 2;
-    
+
             const lenBits = this.length.toString(2);
             if (lenBits.length < 1) {
                 throw new Error("Comprimento do pacote incorreto");
             }
-    
+
             if (lenBits[0] === "1") {
                 this.length = this.length & 0x7FFF; // Se houver dados não enviados, limpe o bit mais significativo
             }
-    
+
             // Decodifica os tags
             while (pos < paketBodyLen) {
                 const tag = new Tag();
                 tag.tag = pkg.readUInt8(pos);
                 pos++;
-    
+
                 if (tagsTable.has(tag.tag)) {
                     const tagInfo = tagsTable.get(tag.tag);
                     const tagVal = Buffer.alloc(tagInfo!.Len);
                     pkg.copy(tagVal, 0, pos, pos + tagInfo!.Len);
                     pos += tagInfo!.Len;
-    
+
                     tag.setValue(tagInfo!.Type, tagVal);
                     this.tags.push(tag);
                 } else {
@@ -488,14 +536,21 @@ function useParsepacket(): ParsePacketApi {
                 } catch (error) {
                     console.log(error);
                 }
-                let client = outPkg.client;
                 outPkg = new GalileoParsePacket();
-                outPkg.client = client;
                 outPkg.receivedTimestamp = receivedTime;
                 isSave = false;
             }
 
             switch (curTag.tag) {
+                case 0x01:
+                    outPkg.hardwareVersion = curTag.value.val;
+                    break;
+                case 0x02:
+                    outPkg.firmwareVersion = curTag.value.val;
+                    break;
+                case 0x03:
+                    outPkg.imei = curTag.value.val;
+                    break;
                 case 0x04:
                     outPkg.client = curTag.value.val;
                     break;
@@ -515,8 +570,67 @@ function useParsepacket(): ParsePacketApi {
                     outPkg.course = curTag.value.course;
                     outPkg.speed = curTag.value.speed;
                     break;
+                case 0x34:
+                    outPkg.height = curTag.value.val;
+                    break;
                 case 0x35:
                     outPkg.hdop = curTag.value.val;
+                    break;
+                case 0x40:
+                    outPkg.deviceStatus = curTag.value.val;
+                    break;
+                case 0x41:
+                    outPkg.supplyVoltage = curTag.value.val;
+                    break;
+                case 0x42:
+                    outPkg.batteryVoltage = curTag.value.val;
+                    break;
+                case 0x43:
+                    outPkg.temperature = curTag.value.val;
+                    break;
+                case 0x44:
+                    outPkg.accelX = curTag.value.x;
+                    outPkg.accelY = curTag.value.y;
+                    outPkg.accelZ = curTag.value.z;
+                    break;
+                case 0x45:
+                    outPkg.outputStatus = curTag.value.val;
+                    break;
+                case 0x46:
+                    outPkg.inputStatus = curTag.value.val;
+                    break;
+                case 0x50:
+                    outPkg.inputVoltage0 = curTag.value.val;
+                    break;
+                case 0x51:
+                    outPkg.inputVoltage1 = curTag.value.val;
+                    break;
+                case 0x52:
+                    outPkg.inputVoltage2 = curTag.value.val;
+                    break;
+                case 0x53:
+                    outPkg.inputVoltage3 = curTag.value.val;
+                    break;
+                case 0x54:
+                    outPkg.inputVoltage4 = curTag.value.val;
+                    break;
+                case 0x55:
+                    outPkg.inputVoltage5 = curTag.value.val;
+                    break;
+                case 0x56:
+                    outPkg.inputVoltage6 = curTag.value.val;
+                    break;
+                case 0x57:
+                    outPkg.inputVoltage7 = curTag.value.val;
+                    break;
+                case 0x60:
+                    outPkg.rs485a = curTag.value.val;
+                    break;
+                case 0x61:
+                    outPkg.rs485b = curTag.value.val;
+                    break;
+                case 0x62:
+                    outPkg.rs485c = curTag.value.val;
                     break;
             }
             prevTag = curTag.tag;
