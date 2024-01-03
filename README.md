@@ -27,21 +27,22 @@ sendo estes responsáveis por enviar pacotes de dados ao celular e apresentá-lo
 - Versão BETA da aplicação: [Link](https://expo.dev/accounts/ble-user-gustavo/projects/expo-ble-darwin/builds/c79fbe0b-f4b0-4a18-a9f0-939d202825b2)
 - Documentação Galileosky sobre BLE: [Link](https://base.galileosky.com/articles/#!en-documentation/developing-a-mobile-app-for-interacting-with-galileosky-tracking-devices-via-bluetooth/q/bluetooth/qid/13193/qp/4)
 - Documentação protocolo Galileosky: [Link](https://base.galileosky.com/articles/#!en-documentation/galileosky-protocol/a/h2_1310565463)
-- Github lib RN BLE plx: [Link](https://github.com/dotintent/react-native-ble-plx)
-- Documentação lib RN BLE plx: [Link](https://github.com/dotintent/react-native-ble-plx)
+- Github lib React-Native-BLE-plx: [Link](https://github.com/dotintent/react-native-ble-plx)
+- Documentação lib React-Native-BLE-plx: [Link](https://github.com/dotintent/react-native-ble-plx)
   
 ## 🔖 Layout
   
 O Layout pode ser encontrado no Figma por meio do seguinte [Link](https://www.figma.com/file/qgwWujNtdWrZmuNFNuFTFb/BLE-app?type=design&node-id=0%3A1&mode=design&t=t6wQ9OR9xSsCDwY5-1)
 
 ## ⏯️ Testes
-- Versão Android: 5+
+- Versão da documentação: 5 (Lollipop)
+- Versão Android testada: 7.1.1 (Nougat) e 13 (Android 13)
+- Versão API: 25 e 33
 - Versão Expo: 49
 - Versão react-Native: 72
 - Firmware Galileosky: 38
 
 ## 🧮 Execução
-
 
 ## 🧰 Configurações
 
@@ -117,3 +118,57 @@ eas build --profile development --platform ios
 
 ---
 
+## Anotações
+
+- Características e UUID
+
+```
+Serviço (Retorna da conexão BLE): 0000a441-0000-1000-8000-00805f9b34fb
+SPS ou Read (Documentação): 0783b03e-8535-b5a0-7140-a304d2495cb7
+Server_TX ou Notify (Documentação): 0783b03e-8535-b5a0-7140-a304d2495cb8
+Server_RX ou WriteNoResponse (Documentação): 0783b03e-8535-b5a0-7140-a304d2495cba
+Flow_CTRL ou WriteNoResponse_Notify (Documentação): 0783b03e-8535-b5a0-7140-a304d2495cb9
+```
+
+
+- Formato de mensagem
+```
+/****** Formato da mensagem / 250 bytes *******
+| Byte nº | Length | Value |    Descrição     |
+-----------------------------------------------
+|   1     |    1   | 0x41  |                  |
+|   2     |    1   | 0xA4  | Cabeçalho da     |
+|   3     |    1   | 0x12  | Mensagem         |
+|   4     |    1   | 0x21  |                  |
+|  ...    |   ...  |       | Pacote principal |
+|   n     |   15   | 0x03  |    IMEI          |
+|  ...    |   ...  |       | Pacote principal |
+-----------------------------------------------
+```
+
+- Exemplo de mensagem
+
+```
+Cabeçalho retornando: QaQSIQ==
+https://cryptii.com/pipes/base64-to-binary
+
+QaQSIQ==
+AR4AAzg2MjM=
+MTEwNjEzMTU=
+MjQ2EAAAQEI=
+K0GYXkKADkMmIMA=
+
+Pacote: 
+Header BLE:         41 A4 12 21 
+Header PCT:         01 
+Length:             1e 00 
+IMEI:               03 38 36 32 33 31 31 30 36 31 33 31 35 32 34 36 
+Number of record:   10 00 00 
+Status device:      40 42 2B 
+Supply Voltage:     41 98 5e 
+Battery Voltage:    42 80 0e 
+Inside temperature: 43 26
+CRC:                20 c0
+
+A mensagem é enviada em partes que devem ser juntadas posteriormente
+```
