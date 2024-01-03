@@ -7,6 +7,7 @@ import {
     Text,
     StyleSheet,
     TouchableOpacity,
+    View,
 } from "react-native";
 import { Device } from "react-native-ble-plx";
 
@@ -37,6 +38,10 @@ const DeviceModalListItem: FC<DeviceModalListItemProps> = (props) => {
             style={modalStyle.ctaButton}
         >
             <Text style={modalStyle.ctaButtonText}>{item.item.name}</Text>
+            <View style={{alignItems: "center", justifyContent: "center" ,backgroundColor: 'white', borderRadius: 20, width: 40, height: 40}}>
+            <Text style={{color: "#FF6060", fontWeight: 'bold'}}>{item.item.rssi}</Text>
+            </View>
+            
         </TouchableOpacity>
     );
 };
@@ -69,7 +74,7 @@ const DeviceModal: FC<DeviceModalProps> = (props) => {
                     Selecione um dispositivo
                 </Text>
                 <FlatList
-                    contentContainerStyle={modalStyle.modalFlatlistContiner}
+                    contentContainerStyle={modalStyle.modalFlatlistContainer}
                     data={devices}
                     renderItem={renderDeviceModalListItem}
                 />
@@ -83,7 +88,7 @@ const modalStyle = StyleSheet.create({
         flex: 1,
         backgroundColor: "#f2f2f2",
     },
-    modalFlatlistContiner: {
+    modalFlatlistContainer: {
         flex: 1,
         justifyContent: "center",
     },
@@ -107,10 +112,12 @@ const modalStyle = StyleSheet.create({
         textAlign: "center",
     },
     ctaButton: {
+        flexDirection: 'row',
         backgroundColor: "#FF6060",
-        justifyContent: "center",
+        justifyContent: "space-between",
         alignItems: "center",
         height: 50,
+        paddingHorizontal: 12,
         marginHorizontal: 20,
         marginBottom: 5,
         borderRadius: 8,
