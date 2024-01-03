@@ -9,10 +9,6 @@ import {
 import DeviceModal from "./DeviceConnectionModal";
 import useBLE from "./useBLE";
 import useParsepacket from "./useParsepacket";
-import dayjs from 'dayjs'
-import ptBr from 'dayjs/locale/pt-br'
-
-dayjs.locale(ptBr)
 
 const App = () => {
   const { handleRecvPkg, outParsedPkg } = useParsepacket();
@@ -65,15 +61,15 @@ const App = () => {
               (<Text>...</Text>)
             }
             
-            {/* <Text style={styles.heartRateText}>{galileoDataBuffer}</Text>
-            <Text style={styles.heartRateText}>TAMANHO: {size}</Text> */}
-            <Text style={styles.heartRateText}>FIRMWARE: {outParsedPkg.firmwareVersion}</Text>
-            <Text style={styles.heartRateText}>HARDWARE: {outParsedPkg.hardwareVersion}</Text>
-            <Text style={styles.heartRateText}>RECEIVED: {outParsedPkg.receivedTimestamp}</Text>
-            <Text style={styles.heartRateText}>NAVIGATION: {outParsedPkg.navigationTimestamp}</Text>
-            {/* <Text style={styles.heartRateText}>LATITUDE: {outParsedPkg.latitude}</Text>
+            <Text style={styles.heartRateText}>{galileoDataBuffer}</Text>
+            {/*<Text style={styles.heartRateText}>TAMANHO: {size}</Text> */}
+            {/* <Text style={styles.heartRateText}>FIRMWARE: {outParsedPkg.firmwareVersion}</Text>
+            <Text style={styles.heartRateText}>HARDWARE: {outParsedPkg.hardwareVersion}</Text> */}
+            {/* <Text style={styles.heartRateText}>RECEIVED: {outParsedPkg.receivedTimestamp}</Text>
+            <Text style={styles.heartRateText}>NAVIGATION: {outParsedPkg.navigationTimestamp}</Text> */}
+            <Text style={styles.heartRateText}>LATITUDE: {outParsedPkg.latitude}</Text>
             <Text style={styles.heartRateText}>LONGITUDE: {outParsedPkg.longitude}</Text>
-            <Text style={styles.heartRateText}>BATERIA: {outParsedPkg.batteryVoltage}</Text>
+            {/* <Text style={styles.heartRateText}>BATERIA: {outParsedPkg.batteryVoltage}</Text>
             <Text style={styles.heartRateText}>FONTE: {outParsedPkg.supplyVoltage}</Text>
             <Text style={styles.heartRateText}>ALTITUDE: {outParsedPkg.height}</Text>
             <Text style={styles.heartRateText}>HDOP: {outParsedPkg.hdop}</Text>
