@@ -9,10 +9,10 @@ interface ParsePacketApi {
     outParsedPkg: GalileoParsePacket;
 }
 
-const headerLen = 3;
-const tagHeader = 0x01;
-const magicHeaderLen = 4;
-const millisecondsToSeconds = 1000;
+const HEADERLEN = 3;
+const TAGHEADER = 0x01;
+const MAGICHEADERLEN = 4;
+const MILLISECONDSTOSECONDS = 1000;
 
 function useParsepacket(): ParsePacketApi {
 
@@ -20,10 +20,10 @@ function useParsepacket(): ParsePacketApi {
 
     const handleRecvPkg = (packet: Buffer) => {
         
-        const data = packet.subarray(magicHeaderLen, packet.length);
-        const headerBuf = data.subarray(0, headerLen);
+        const data = packet.subarray(MAGICHEADERLEN, packet.length);
+        const headerBuf = data.subarray(0, HEADERLEN);
 
-        if (headerBuf[0] !== tagHeader) {
+        if (headerBuf[0] !== TAGHEADER) {
             console.log("Pacote não está no formato Galileo");
             return;
         }
@@ -42,7 +42,7 @@ function useParsepacket(): ParsePacketApi {
         }
 
         let outPkg = new GalileoParsePacket();
-        const receivedTime = Math.floor(Date.now() / millisecondsToSeconds);
+        const receivedTime = Math.floor(Date.now() / MILLISECONDSTOSECONDS);
         outPkg.receivedTimestamp = receivedTime;
 
         for (const curTag of pkg.tags) {
