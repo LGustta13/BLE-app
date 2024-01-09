@@ -44,6 +44,8 @@ const App = () => {
       const galileoPktSize = galileoDataBuffer.readUInt16LE(5)
       if (galileoPktSize === (size - 9)) {
         handleRecvPkg(galileoDataBuffer);
+      } else {
+        console.log("Erro no tamanho da mensagem")
       }
     }
   }, [size])
@@ -57,25 +59,25 @@ const App = () => {
             <Text style={styles.heartRateTitleText}>Dados do coletor</Text>
             {
               outParsedPkg.imei ? (<Text style={styles.heartRateTitleTextSnd}>{outParsedPkg.imei}</Text>) :
-              (<Text>...</Text>)
+                (<Text>...</Text>)
             }
-            
-            <Text style={styles.heartRateText}>{galileoDataBuffer}</Text>
+
+            {/* <Text style={styles.heartRateText}>{galileoDataBuffer}</Text> */}
             {/*<Text style={styles.heartRateText}>TAMANHO: {size}</Text> */}
             <Text style={styles.heartRateText}>FIRMWARE: {outParsedPkg.firmwareVersion}</Text>
-            {/* <Text style={styles.heartRateText}>HARDWARE: {outParsedPkg.hardwareVersion}</Text> */}
-            {/* <Text style={styles.heartRateText}>RECEIVED: {outParsedPkg.receivedTimestamp}</Text>
-            <Text style={styles.heartRateText}>NAVIGATION: {outParsedPkg.navigationTimestamp}</Text> */}
+            {/* <Text style={styles.heartRateText}>: {outParsedPkg.hardwareVersion}</Text> */}
+            {/* <Text style={styles.heartRateText}>RECEIVED: {outParsedPkg.receivedTimestamp}</Text>*/}
+            {/*<Text style={styles.heartRateText}>NAVIGATION: {outParsedPkg.navigationTimestamp}</Text> */}
             <Text style={styles.heartRateText}>LATITUDE: {outParsedPkg.latitude}</Text>
             <Text style={styles.heartRateText}>LONGITUDE: {outParsedPkg.longitude}</Text>
-            {/* <Text style={styles.heartRateText}>BATERIA: {outParsedPkg.batteryVoltage}</Text>
-            <Text style={styles.heartRateText}>FONTE: {outParsedPkg.supplyVoltage}</Text>
-            <Text style={styles.heartRateText}>ALTITUDE: {outParsedPkg.height}</Text>
-            <Text style={styles.heartRateText}>HDOP: {outParsedPkg.hdop}</Text>
-          <Text style={styles.heartRateText}>TEMPERATURA: {outParsedPkg.temperature}</Text>*/}
+            {/* <Text style={styles.heartRateText}>BATERIA: {outParsedPkg.batteryVoltage}</Text>*/}
+            {/*<Text style={styles.heartRateText}>FONTE: {outParsedPkg.supplyVoltage}</Text>*/}
+            {/*<Text style={styles.heartRateText}>ALTITUDE: {outParsedPkg.height}</Text>*/}
+            {/*<Text style={styles.heartRateText}>HDOP: {outParsedPkg.hdop}</Text>*/}
+            {/*<Text style={styles.heartRateText}>TEMPERATURA: {outParsedPkg.temperature}</Text>*/}
             <Text style={styles.heartRateText}>VELOCIDADE: {outParsedPkg.speed} Km/h</Text>
-            {/*<Text style={styles.heartRateText}>PACOTE: {outParsedPkg.packetID}</Text>
-            <Text style={styles.heartRateText}>ENTRADA 3: {outParsedPkg.inputVoltage3}</Text> */}
+            {/*<Text style={styles.heartRateText}>PACOTE: {outParsedPkg.packetID}</Text> */}
+            {/*<Text style={styles.heartRateText}>ENTRADA 3: {outParsedPkg.inputVoltage3}</Text> */}
           </>
         ) : (
           <Text style={styles.heartRateTitleText}>
@@ -119,7 +121,7 @@ const styles = StyleSheet.create({
     color: "black",
   },
   heartRateTitleTextSnd: {
-    fontSize: 20, 
+    fontSize: 20,
     marginTop: 5,
     textAlign: "center",
     marginHorizontal: 20,
