@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import {
   SafeAreaView,
   StyleSheet,
@@ -7,19 +7,17 @@ import {
   View,
 } from "react-native";
 import DeviceModal from "./DeviceConnectionModal";
-import { useBLE, useParsepacket } from "./src/hooks";
+import useBLE from "./src/hooks/useBLE/useBLE";
+import useParsepacket from "./src/hooks/useParsepacket/useParsepacket";
 
 const App = () => {
-  const { handleRecvPkg, outParsedPkg } = useParsepacket();
   const {
     requestPermissions,
     scanForPeripherals,
     allDevices,
     connectToDevice,
     connectedDevice,
-    galileoDataBuffer,
     disconnectFromDevice,
-    size,
   } = useBLE();
   const [isModalVisible, setIsModalVisible] = useState<boolean>(false);
 
@@ -39,46 +37,11 @@ const App = () => {
     setIsModalVisible(true);
   };
 
-  useEffect(() => {
-    if (galileoDataBuffer.length > 4) {
-      const galileoPktSize = galileoDataBuffer.readUInt16LE(5)
-      if (galileoPktSize === (size - 9)) {
-        handleRecvPkg(galileoDataBuffer);
-      } else {
-        console.log("Erro no tamanho da mensagem")
-      }
-    }
-  }, [size])
-
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.heartRateTitleWrapper}>
         {connectedDevice ? (
-          <>
-            <Text>Galileosky BLE</Text>
-            <Text style={styles.heartRateTitleText}>Dados do coletor</Text>
-            {
-              outParsedPkg.imei ? (<Text style={styles.heartRateTitleTextSnd}>{outParsedPkg.imei}</Text>) :
-                (<Text>...</Text>)
-            }
-
-            {/* <Text style={styles.heartRateText}>{galileoDataBuffer}</Text> */}
-            {/*<Text style={styles.heartRateText}>TAMANHO: {size}</Text> */}
-            <Text style={styles.heartRateText}>FIRMWARE: {outParsedPkg.firmwareVersion}</Text>
-            {/* <Text style={styles.heartRateText}>: {outParsedPkg.hardwareVersion}</Text> */}
-            {/* <Text style={styles.heartRateText}>RECEIVED: {outParsedPkg.receivedTimestamp}</Text>*/}
-            {/*<Text style={styles.heartRateText}>NAVIGATION: {outParsedPkg.navigationTimestamp}</Text> */}
-            <Text style={styles.heartRateText}>LATITUDE: {outParsedPkg.latitude}</Text>
-            <Text style={styles.heartRateText}>LONGITUDE: {outParsedPkg.longitude}</Text>
-            {/* <Text style={styles.heartRateText}>BATERIA: {outParsedPkg.batteryVoltage}</Text>*/}
-            {/*<Text style={styles.heartRateText}>FONTE: {outParsedPkg.supplyVoltage}</Text>*/}
-            {/*<Text style={styles.heartRateText}>ALTITUDE: {outParsedPkg.height}</Text>*/}
-            {/*<Text style={styles.heartRateText}>HDOP: {outParsedPkg.hdop}</Text>*/}
-            {/*<Text style={styles.heartRateText}>TEMPERATURA: {outParsedPkg.temperature}</Text>*/}
-            <Text style={styles.heartRateText}>VELOCIDADE: {outParsedPkg.speed} Km/h</Text>
-            {/*<Text style={styles.heartRateText}>PACOTE: {outParsedPkg.packetID}</Text> */}
-            {/*<Text style={styles.heartRateText}>ENTRADA 3: {outParsedPkg.inputVoltage3}</Text> */}
-          </>
+          <useParsepacket/>
         ) : (
           <Text style={styles.heartRateTitleText}>
             Conecte a um Galileo
@@ -108,11 +71,6 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: "#f2f2f2",
   },
-  heartRateTitleWrapper: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-  },
   heartRateTitleText: {
     fontSize: 30,
     fontWeight: "bold",
@@ -120,21 +78,10 @@ const styles = StyleSheet.create({
     marginHorizontal: 20,
     color: "black",
   },
-  heartRateTitleTextSnd: {
-    fontSize: 20,
-    marginTop: 5,
-    textAlign: "center",
-    marginHorizontal: 20,
-    color: "black",
-    backgroundColor: '#D3D3D3',
-    padding: 10,
-    borderRadius: 10,
-  },
-  heartRateText: {
-    fontSize: 12,
-    marginTop: 15,
-    marginHorizontal: 10,
-    display: 'flex',
+  heartRateTitleWrapper: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
   },
   ctaButton: {
     backgroundColor: "#FF6060",

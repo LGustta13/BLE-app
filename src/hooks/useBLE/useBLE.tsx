@@ -10,10 +10,7 @@ import { Buffer } from "buffer";
 import base64 from "react-native-base64";
 
 import requestPermissions from "./permissions";
-
-const GALILEOSKY_READ_UUID = "0783b03e-8535-b5a0-7140-a304d2495cb7";
-const GALILEOSKY_NOTIFY_UUID = "0783b03e-8535-b5a0-7140-a304d2495cb8";
-const NAME_GALILEO = "GS7X 86"
+import { useParsepacket } from "../";
 
 interface BluetoothLowEnergyApi {
     requestPermissions(): Promise<boolean>;
@@ -22,19 +19,25 @@ interface BluetoothLowEnergyApi {
     disconnectFromDevice: () => void;
     connectedDevice: Device | null;
     allDevices: Device[];
-    galileoDataBuffer: Buffer;
-    size: number;
+    parsePkg: boolean;
 }
 
-const magic_header = 1101271585; // 0x41 0xA4 0x12 0x21
-const magic_header_len = 4;
+const GALILEOSKY_READ_UUID = "0783b03e-8535-b5a0-7140-a304d2495cb7";
+const GALILEOSKY_NOTIFY_UUID = "0783b03e-8535-b5a0-7140-a304d2495cb8";
+const NAME_GALILEO = "GS7X 86";
+const MAGIC_HEADER = 1101271585; // 0x41 0xA4 0x12 0x21
+const MAGIC_HEADER_LEN = 4;
 
 function useBLE(): BluetoothLowEnergyApi {
 
+    const {handleRecvPkg} = useParsepacket();
+
     const [allDevices, setAllDevices] = useState<Device[]>([]);
     const [connectedDevice, setConnectedDevice] = useState<Device | null>(null);
-    const [galileoDataBuffer, setGalileoDataBuffer] = useState<Buffer>(Buffer.alloc(0));
-    const [size, setSize] = useState<number>(0);
+    const [parsePkg, setParsePkg] = useState(false);
+
+    let galileoDataBuffer = Buffer.alloc(0);
+    let size = 0;
 
     const bleManager = useMemo(() => new BleManager(), []);
 
@@ -73,8 +76,8 @@ function useBLE(): BluetoothLowEnergyApi {
         if (connectedDevice) {
             bleManager.cancelDeviceConnection(connectedDevice.id);
             setConnectedDevice(null);
-            setGalileoDataBuffer(Buffer.alloc(0));
-            setSize(0);
+            galileoDataBuffer = Buffer.alloc(0);
+            size = 0;
         }
     };
 
@@ -108,15 +111,21 @@ function useBLE(): BluetoothLowEnergyApi {
 
         const rawData = decodeBase64(characteristic?.value ?? '');
 
-        if (rawData.length >= magic_header_len) {
-            if (rawData.readUInt32BE(0) === magic_header) {
-                setGalileoDataBuffer(Buffer.alloc(0));
-                setSize(0);
+        if (rawData.length >= MAGIC_HEADER_LEN) {
+            if (rawData.readUInt32BE(0) === MAGIC_HEADER) {
+                galileoDataBuffer = Buffer.alloc(0);
+                size = 0;
             }
         }
 
-        setGalileoDataBuffer((prevState) => Buffer.concat([prevState, rawData]));
-        setSize((prevState) => prevState + rawData.length)
+        galileoDataBuffer = Buffer.concat([galileoDataBuffer, rawData]);
+        size = size + rawData.length;
+
+        if (galileoDataBuffer.length > 4) {
+            if (galileoDataBuffer.readUInt16LE(5) === (size - 9)) {
+                handleRecvPkg(galileoDataBuffer);
+            }
+        }
     };
 
     const startStreamingData = async (device: Device) => {
@@ -138,8 +147,7 @@ function useBLE(): BluetoothLowEnergyApi {
         allDevices,
         connectedDevice,
         disconnectFromDevice,
-        galileoDataBuffer,
-        size,
+        parsePkg,
     };
 }
 

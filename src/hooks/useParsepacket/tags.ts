@@ -1,4 +1,5 @@
 import * as types from "./types";
+import { Buffer } from "buffer";
 
 export default class Tag {
     tag: number;

@@ -1,25 +1,29 @@
 import { Buffer } from "buffer";
 import { useState } from "react";
+import {
+    StyleSheet,
+    Text,
+} from "react-native";
 
 import GalileoParsePacket from "./parse";
 import Packet from "./packet";
 
-interface ParsePacketApi {
-    handleRecvPkg: (packet: Buffer) => void;
-    outParsedPkg: GalileoParsePacket;
-}
+// interface ParsePacketApi {
+//     handleRecvPkg: (packet: Buffer) => void;
+//     outParsedPkg: GalileoParsePacket;
+// }
 
 const HEADERLEN = 3;
 const TAGHEADER = 0x01;
 const MAGICHEADERLEN = 4;
 const MILLISECONDSTOSECONDS = 1000;
 
-function useParsepacket(): ParsePacketApi {
+function useParsepacket() {
 
     const [outParsedPkg, setOutParsedPkg] = useState<GalileoParsePacket>(new GalileoParsePacket())
 
     const handleRecvPkg = (packet: Buffer) => {
-        
+
         const data = packet.subarray(MAGICHEADERLEN, packet.length);
         const headerBuf = data.subarray(0, HEADERLEN);
 
@@ -32,7 +36,7 @@ function useParsepacket(): ParsePacketApi {
         try {
             pkg.decode(data);
         } catch (error) {
-            console.log('Erro na decodificação do pacote');
+            console.log(error);
             return;
         }
 
@@ -138,15 +142,62 @@ function useParsepacket(): ParsePacketApi {
                     break;
             }
         }
-
-        console.log(outPkg.save());
         setOutParsedPkg(outPkg);
     };
 
-    return {
-        handleRecvPkg,
-        outParsedPkg,
-    }
+    return (
+        <>
+            <Text>Galileosky BLE</Text>
+            <Text style={styles.heartRateTitleText}>Dados do coletor</Text>
+            {
+                outParsedPkg.imei ? (<Text style={styles.heartRateTitleTextSnd}>{outParsedPkg.imei}</Text>) :
+                    (<Text>...</Text>)
+            }
+
+            {/* <Text style={styles.heartRateText}>{galileoDataBuffer}</Text> */}
+            {/*<Text style={styles.heartRateText}>TAMANHO: {size}</Text> */}
+            <Text style={styles.heartRateText}>FIRMWARE: {outParsedPkg.firmwareVersion}</Text>
+            {/* <Text style={styles.heartRateText}>: {outParsedPkg.hardwareVersion}</Text> */}
+            {/* <Text style={styles.heartRateText}>RECEIVED: {outParsedPkg.receivedTimestamp}</Text>*/}
+            {/*<Text style={styles.heartRateText}>NAVIGATION: {outParsedPkg.navigationTimestamp}</Text> */}
+            <Text style={styles.heartRateText}>LATITUDE: {outParsedPkg.latitude}</Text>
+            <Text style={styles.heartRateText}>LONGITUDE: {outParsedPkg.longitude}</Text>
+            {/* <Text style={styles.heartRateText}>BATERIA: {outParsedPkg.batteryVoltage}</Text>*/}
+            {/*<Text style={styles.heartRateText}>FONTE: {outParsedPkg.supplyVoltage}</Text>*/}
+            {/*<Text style={styles.heartRateText}>ALTITUDE: {outParsedPkg.height}</Text>*/}
+            {/*<Text style={styles.heartRateText}>HDOP: {outParsedPkg.hdop}</Text>*/}
+            {/*<Text style={styles.heartRateText}>TEMPERATURA: {outParsedPkg.temperature}</Text>*/}
+            <Text style={styles.heartRateText}>VELOCIDADE: {outParsedPkg.speed} Km/h</Text>
+            {/*<Text style={styles.heartRateText}>PACOTE: {outParsedPkg.packetID}</Text> */}
+            {/*<Text style={styles.heartRateText}>ENTRADA 3: {outParsedPkg.inputVoltage3}</Text> */}
+        </>
+    )
 }
+
+const styles = StyleSheet.create({
+    heartRateTitleText: {
+        fontSize: 30,
+        fontWeight: "bold",
+        textAlign: "center",
+        marginHorizontal: 20,
+        color: "black",
+    },
+    heartRateTitleTextSnd: {
+        fontSize: 20,
+        marginTop: 5,
+        textAlign: "center",
+        marginHorizontal: 20,
+        color: "black",
+        backgroundColor: '#D3D3D3',
+        padding: 10,
+        borderRadius: 10,
+    },
+    heartRateText: {
+        fontSize: 12,
+        marginTop: 15,
+        marginHorizontal: 10,
+        display: 'flex',
+    },
+})
 
 export default useParsepacket;

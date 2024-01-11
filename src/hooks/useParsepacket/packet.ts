@@ -1,5 +1,6 @@
 import tagsTable from "./map";
 import Tag from "./tags";
+import { Buffer } from "buffer";
 
 const sendBitFilter = 0x7FFF;
 const sendBitData = "1";
