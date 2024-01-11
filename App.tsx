@@ -44,9 +44,7 @@ const App = () => {
       const galileoPktSize = galileoDataBuffer.readUInt16LE(5)
       if (galileoPktSize === (size - 9)) {
         handleRecvPkg(galileoDataBuffer);
-      } else {
-        console.log("Erro no tamanho da mensagem")
-      }
+      } 
     }
   }, [size])
 
@@ -66,8 +64,8 @@ const App = () => {
             {/*<Text style={styles.heartRateText}>TAMANHO: {size}</Text> */}
             <Text style={styles.heartRateText}>FIRMWARE: {outParsedPkg.firmwareVersion}</Text>
             {/* <Text style={styles.heartRateText}>: {outParsedPkg.hardwareVersion}</Text> */}
-            {/* <Text style={styles.heartRateText}>RECEIVED: {outParsedPkg.receivedTimestamp}</Text>*/}
-            {/*<Text style={styles.heartRateText}>NAVIGATION: {outParsedPkg.navigationTimestamp}</Text> */}
+            <Text style={styles.heartRateText}>RECEIVED: {outParsedPkg.receivedTimestamp}</Text>
+            <Text style={styles.heartRateText}>NAVIGATION: {outParsedPkg.navigationTimestamp}</Text>
             <Text style={styles.heartRateText}>LATITUDE: {outParsedPkg.latitude}</Text>
             <Text style={styles.heartRateText}>LONGITUDE: {outParsedPkg.longitude}</Text>
             {/* <Text style={styles.heartRateText}>BATERIA: {outParsedPkg.batteryVoltage}</Text>*/}

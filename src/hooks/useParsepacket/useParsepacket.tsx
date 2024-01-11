@@ -139,7 +139,6 @@ function useParsepacket(): ParsePacketApi {
             }
         }
 
-        console.log(outPkg.save());
         setOutParsedPkg(outPkg);
     };
 
