@@ -5,11 +5,12 @@ import {
     Modal,
     SafeAreaView,
     Text,
-    StyleSheet,
     TouchableOpacity,
     View,
 } from "react-native";
 import { Device } from "react-native-ble-plx";
+
+import { styles } from "./styles";
 
 type DeviceModalListItemProps = {
     item: ListRenderItemInfo<Device>;
@@ -35,18 +36,18 @@ const DeviceModalListItem: FC<DeviceModalListItemProps> = (props) => {
     return (
         <TouchableOpacity
             onPress={connectAndCloseModal}
-            style={modalStyle.ctaButton}
+            style={styles.ctaButton}
         >
-            <Text style={modalStyle.ctaButtonText}>{item.item.name}</Text>
-            <View style={{alignItems: "center", justifyContent: "center" ,backgroundColor: 'white', borderRadius: 20, width: 40, height: 40}}>
-            <Text style={{color: "#FF6060", fontWeight: 'bold'}}>{item.item.rssi}</Text>
+            <Text style={styles.ctaButtonText}>{item.item.name}</Text>
+            <View style={{alignItems: "center", justifyContent: "center", borderRadius: 20, width: 40, height: 40}}>
+            <Text style={{color: "#FFFFFF", fontWeight: 'bold'}}>{item.item.rssi}</Text>
             </View>
             
         </TouchableOpacity>
     );
 };
 
-const DeviceModal: FC<DeviceModalProps> = (props) => {
+export const DeviceModal: FC<DeviceModalProps> = (props) => {
     const { devices, visible, connectToPeripheral, closeModal } = props;
 
     const renderDeviceModalListItem = useCallback(
@@ -64,17 +65,17 @@ const DeviceModal: FC<DeviceModalProps> = (props) => {
 
     return (
         <Modal
-            style={modalStyle.modalContainer}
+            style={styles.modalContainer}
             animationType="slide"
-            transparent={false}
+            transparent={true}
             visible={visible}
         >
-            <SafeAreaView style={modalStyle.modalTitle}>
-                <Text style={modalStyle.modalTitleText}>
+            <SafeAreaView style={styles.modalBg}>
+                <Text style={styles.modalTitleText}>
                     Selecione um dispositivo
                 </Text>
                 <FlatList
-                    contentContainerStyle={modalStyle.modalFlatlistContainer}
+                    contentContainerStyle={styles.modalFlatlistContainer}
                     data={devices}
                     renderItem={renderDeviceModalListItem}
                 />
@@ -82,51 +83,3 @@ const DeviceModal: FC<DeviceModalProps> = (props) => {
         </Modal>
     );
 };
-
-const modalStyle = StyleSheet.create({
-    modalContainer: {
-        flex: 1,
-        backgroundColor: "#f2f2f2",
-    },
-    modalFlatlistContainer: {
-        flex: 1,
-        justifyContent: "center",
-    },
-    modalCellOutline: {
-        borderWidth: 1,
-        borderColor: "black",
-        alignItems: "center",
-        marginHorizontal: 20,
-        paddingVertical: 15,
-        borderRadius: 8,
-    },
-    modalTitle: {
-        flex: 1,
-        backgroundColor: "#f2f2f2",
-    },
-    modalTitleText: {
-        marginTop: 40,
-        fontSize: 30,
-        fontWeight: "bold",
-        marginHorizontal: 20,
-        textAlign: "center",
-    },
-    ctaButton: {
-        flexDirection: 'row',
-        backgroundColor: "#FF6060",
-        justifyContent: "space-between",
-        alignItems: "center",
-        height: 50,
-        paddingHorizontal: 12,
-        marginHorizontal: 20,
-        marginBottom: 5,
-        borderRadius: 8,
-    },
-    ctaButtonText: {
-        fontSize: 18,
-        fontWeight: "bold",
-        color: "white",
-    },
-});
-
-export default DeviceModal;

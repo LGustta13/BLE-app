@@ -23,7 +23,6 @@ interface BluetoothLowEnergyApi {
     connectedDevice: Device | null;
     allDevices: Device[];
     galileoDataBuffer: Buffer;
-    size: number;
 }
 
 const magic_header = 1101271585; // 0x41 0xA4 0x12 0x21
@@ -34,7 +33,9 @@ function useBLE(): BluetoothLowEnergyApi {
     const [allDevices, setAllDevices] = useState<Device[]>([]);
     const [connectedDevice, setConnectedDevice] = useState<Device | null>(null);
     const [galileoDataBuffer, setGalileoDataBuffer] = useState<Buffer>(Buffer.alloc(0));
-    const [size, setSize] = useState<number>(0);
+
+    let galileoData = Buffer.alloc(0);
+    let size = 0;
 
     const bleManager = useMemo(() => new BleManager(), []);
 
@@ -73,8 +74,8 @@ function useBLE(): BluetoothLowEnergyApi {
         if (connectedDevice) {
             bleManager.cancelDeviceConnection(connectedDevice.id);
             setConnectedDevice(null);
-            setGalileoDataBuffer(Buffer.alloc(0));
-            setSize(0);
+            galileoData = Buffer.alloc(0);
+            size = 0;
         }
     };
 
@@ -110,13 +111,19 @@ function useBLE(): BluetoothLowEnergyApi {
 
         if (rawData.length >= magic_header_len) {
             if (rawData.readUInt32BE(0) === magic_header) {
-                setGalileoDataBuffer(Buffer.alloc(0));
-                setSize(0);
+                galileoData = Buffer.alloc(0);
+                size = 0;
             }
         }
 
-        setGalileoDataBuffer((prevState) => Buffer.concat([prevState, rawData]));
-        setSize((prevState) => prevState + rawData.length)
+        galileoData = Buffer.concat([galileoData, rawData]);
+        size = size + rawData.length;
+
+        if (galileoData.length > 4) {
+            if (galileoData.readUInt16LE(5) === (size - 9)) {
+                setGalileoDataBuffer(galileoData);
+            }
+        }
     };
 
     const startStreamingData = async (device: Device) => {
@@ -139,7 +146,6 @@ function useBLE(): BluetoothLowEnergyApi {
         connectedDevice,
         disconnectFromDevice,
         galileoDataBuffer,
-        size,
     };
 }
 

@@ -3,6 +3,7 @@ import { useState } from "react";
 
 import GalileoParsePacket from "./parse";
 import Packet from "./packet";
+import Tag from "./tags";
 
 interface ParsePacketApi {
     handleRecvPkg: (packet: Buffer) => void;
@@ -18,29 +19,7 @@ function useParsepacket(): ParsePacketApi {
 
     const [outParsedPkg, setOutParsedPkg] = useState<GalileoParsePacket>(new GalileoParsePacket())
 
-    const handleRecvPkg = (packet: Buffer) => {
-        
-        const data = packet.subarray(MAGICHEADERLEN, packet.length);
-        const headerBuf = data.subarray(0, HEADERLEN);
-
-        if (headerBuf[0] !== TAGHEADER) {
-            console.log("Pacote não está no formato Galileo");
-            return;
-        }
-
-        const pkg = new Packet();
-        try {
-            pkg.decode(data);
-        } catch (error) {
-            console.log('Erro na decodificação do pacote');
-            return;
-        }
-
-        if (pkg.tags.length < 1) {
-            console.log('Nenhum dado decodificado');
-            return;
-        }
-
+    const iterateTags = async (pkg : Packet) => {
         let outPkg = new GalileoParsePacket();
         const receivedTime = Math.floor(Date.now() / MILLISECONDSTOSECONDS);
         outPkg.receivedTimestamp = receivedTime;
@@ -139,7 +118,33 @@ function useParsepacket(): ParsePacketApi {
             }
         }
 
-        setOutParsedPkg(outPkg);
+        return outPkg;
+    }
+
+    const handleRecvPkg = async (packet: Buffer) => {
+        
+        const data = packet.subarray(MAGICHEADERLEN, packet.length);
+        const headerBuf = data.subarray(0, HEADERLEN);
+
+        if (headerBuf[0] !== TAGHEADER) {
+            console.log("Pacote não está no formato Galileo");
+            return;
+        }
+
+        const pkg = new Packet();
+        try {
+            pkg.decode(data);
+        } catch (error) {
+            console.log('Erro na decodificação do pacote');
+            return;
+        }
+
+        if (pkg.tags.length < 1) {
+            console.log('Nenhum dado decodificado');
+            return;
+        }
+
+        setOutParsedPkg(await iterateTags(pkg));
     };
 
     return {
