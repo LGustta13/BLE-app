@@ -74,6 +74,7 @@ function useBLE(): BluetoothLowEnergyApi {
         if (connectedDevice) {
             bleManager.cancelDeviceConnection(connectedDevice.id);
             setConnectedDevice(null);
+            setGalileoDataBuffer(Buffer.alloc(0));
             galileoData = Buffer.alloc(0);
             size = 0;
         }

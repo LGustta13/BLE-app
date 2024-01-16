@@ -40,11 +40,4 @@ export const styles = StyleSheet.create({
     width: "47.5%",
     borderRadius: 10,
   },
-
-  cardIcon: {
-    height: "30%",
-    width: "100%",
-    backgroundColor: theme.colors.bgButton,
-    borderRadius: 10,
-  }
 })
