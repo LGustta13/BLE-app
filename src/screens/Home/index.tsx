@@ -2,7 +2,6 @@
 import React, { useEffect, useState } from "react";
 import {
   SafeAreaView,
-  Text,
   View,
 } from "react-native";
 import Ionicons from "@expo/vector-icons/Ionicons";
@@ -14,22 +13,23 @@ import { ButtonConnect } from "../../components/ButtonConnect";
 import { TrackerData } from "../../components/TrackerData";
 
 // Hooks
-import { useBLE, useParsepacket } from "../../hooks";
+import { useBLE } from "../../hooks/useBLE/useBLE";
 
 // Styles
 import { styles } from "./styles";
+import useParsepacket from "../../hooks/useParsepacket/useParsepacket";
 
 const Home = () => {
   const { handleRecvPkg, outParsedPkg } = useParsepacket();
-  const {
-    requestPermissions,
+
+  const {requestPermissions,
     scanForPeripherals,
     allDevices,
     connectToDevice,
     connectedDevice,
     galileoDataBuffer,
-    disconnectFromDevice,
-  } = useBLE();
+    disconnectFromDevice} = useBLE();
+    
   const [isModalVisible, setIsModalVisible] = useState<boolean>(false);
 
   const scanForDevices = async () => {

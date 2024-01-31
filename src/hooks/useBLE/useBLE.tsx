@@ -1,21 +1,23 @@
-import { useMemo, useState } from "react";
+// React e EXPo
+import { ReactNode, createContext, useContext, useState, useMemo } from "react";
 import {
     BleError,
     BleManager,
     Characteristic,
     Device,
 } from "react-native-ble-plx";
+import { PermissionsAndroid, Platform } from "react-native";
+import * as ExpoDevice from "expo-device";
 
+// Libs
 import { Buffer } from "buffer";
 import base64 from "react-native-base64";
 
-import requestPermissions from "./permissions";
+type BLEApiProviderProps = {
+    children: ReactNode;
+}
 
-const GALILEOSKY_READ_UUID = "0783b03e-8535-b5a0-7140-a304d2495cb7";
-const GALILEOSKY_NOTIFY_UUID = "0783b03e-8535-b5a0-7140-a304d2495cb8";
-const NAME_GALILEO = "GS7X 86"
-
-interface BluetoothLowEnergyApi {
+type BLEApiProps = {
     requestPermissions(): Promise<boolean>;
     scanForPeripherals(): void;
     connectToDevice: (deviceId: Device) => Promise<void>;
@@ -25,19 +27,82 @@ interface BluetoothLowEnergyApi {
     galileoDataBuffer: Buffer;
 }
 
-const magic_header = 1101271585; // 0x41 0xA4 0x12 0x21
-const magic_header_len = 4;
+// BLE Services
+const GALILEOSKY_READ_UUID = "0783b03e-8535-b5a0-7140-a304d2495cb7";
+const GALILEOSKY_NOTIFY_UUID = "0783b03e-8535-b5a0-7140-a304d2495cb8";
+const NAME_GALILEO = "GS7X 86"
+const MAGIC_HEADER = 1101271585; // 0x41 0xA4 0x12 0x21
+const MAGIC_HEADER_LEN = 4;
+const ANDROID_API_31 = 31; // Versão 12
 
-function useBLE(): BluetoothLowEnergyApi {
+const BLEApiContext = createContext<BLEApiProps>({} as BLEApiProps);
+
+export function BLEApiProvider({ children }: BLEApiProviderProps) {
 
     const [allDevices, setAllDevices] = useState<Device[]>([]);
     const [connectedDevice, setConnectedDevice] = useState<Device | null>(null);
     const [galileoDataBuffer, setGalileoDataBuffer] = useState<Buffer>(Buffer.alloc(0));
 
-    let galileoData = Buffer.alloc(0);
+    let galileoData = Buffer.alloc(0); // VERIFICAR O USO DO USEMEMO
     let size = 0;
 
     const bleManager = useMemo(() => new BleManager(), []);
+
+    const requestAndroid31Permissions = async () => {
+        const bluetoothScanPermission = await PermissionsAndroid.request(
+            PermissionsAndroid.PERMISSIONS.BLUETOOTH_SCAN,
+            {
+                title: "Bluetooth Scan Permission",
+                message: "Bluetooth Low Energy requires scan permission",
+                buttonPositive: "OK",
+            }
+        );
+        const bluetoothConnectPermission = await PermissionsAndroid.request(
+            PermissionsAndroid.PERMISSIONS.BLUETOOTH_CONNECT,
+            {
+                title: "Bluetooth Connection Permission",
+                message: "Bluetooth Low Energy requires connect permission",
+                buttonPositive: "OK",
+            }
+        );
+        const fineLocationPermission = await PermissionsAndroid.request(
+            PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
+            {
+                title: "Location Permission",
+                message: "Bluetooth Low Energy requires Location",
+                buttonPositive: "OK",
+            }
+        );
+
+        return (
+            bluetoothScanPermission === "granted" &&
+            bluetoothConnectPermission === "granted" &&
+            fineLocationPermission === "granted"
+        );
+    };
+
+    const requestPermissions = async () => {
+        if (Platform.OS === "android") {
+            if ((ExpoDevice.platformApiLevel ?? -1) < ANDROID_API_31) {
+                const granted = await PermissionsAndroid.request(
+                    PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
+                    {
+                        title: "Location Permission",
+                        message: "Bluetooth Low Energy requires Location",
+                        buttonPositive: "OK",
+                    }
+                );
+                return granted === PermissionsAndroid.RESULTS.GRANTED;
+            } else {
+                const isAndroid31PermissionsGranted =
+                    await requestAndroid31Permissions();
+
+                return isAndroid31PermissionsGranted;
+            }
+        } else {
+            return true;
+        }
+    };
 
     const isDuplicateDevice = (devices: Device[], nextDevice: Device) =>
         devices.findIndex((device) => nextDevice.id === device.id) > -1;
@@ -110,8 +175,8 @@ function useBLE(): BluetoothLowEnergyApi {
 
         const rawData = decodeBase64(characteristic?.value ?? '');
 
-        if (rawData.length >= magic_header_len) {
-            if (rawData.readUInt32BE(0) === magic_header) {
+        if (rawData.length >= MAGIC_HEADER_LEN) {
+            if (rawData.readUInt32BE(0) === MAGIC_HEADER) {
                 galileoData = Buffer.alloc(0);
                 size = 0;
             }
@@ -139,15 +204,22 @@ function useBLE(): BluetoothLowEnergyApi {
         }
     };
 
-    return {
-        scanForPeripherals,
-        requestPermissions,
-        connectToDevice,
-        allDevices,
-        connectedDevice,
-        disconnectFromDevice,
-        galileoDataBuffer,
-    };
+    return (
+        <BLEApiContext.Provider value={{
+            scanForPeripherals,
+            requestPermissions,
+            connectToDevice,
+            allDevices,
+            connectedDevice,
+            disconnectFromDevice,
+            galileoDataBuffer,
+        }}>
+            {children}
+        </BLEApiContext.Provider>
+    )
 }
 
-export default useBLE;
+export function useBLE() {
+    const context = useContext(BLEApiContext);
+    return context
+}

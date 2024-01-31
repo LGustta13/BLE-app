@@ -1,9 +1,12 @@
 import Home from "./src/screens/Home";
+import { BLEApiProvider } from "./src/hooks/useBLE/useBLE";
 
 const App = () => {
   
   return (
-    <Home/>
+    <BLEApiProvider>
+      <Home/>
+    </BLEApiProvider>
   );
 };
 
