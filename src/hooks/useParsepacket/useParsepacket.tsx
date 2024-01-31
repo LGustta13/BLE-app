@@ -1,13 +1,16 @@
 import { Buffer } from "buffer";
-import { useState } from "react";
+import { ReactNode, createContext, useContext, useState } from "react";
 
 import GalileoParsePacket from "./parse";
 import Packet from "./packet";
-import Tag from "./tags";
 
-interface ParsePacketApi {
+type ParsePacketApiProps = {
     handleRecvPkg: (packet: Buffer) => void;
     outParsedPkg: GalileoParsePacket;
+}
+
+type ParsePacketApiProviderProps = {
+    children: ReactNode;
 }
 
 const HEADERLEN = 3;
@@ -15,11 +18,13 @@ const TAGHEADER = 0x01;
 const MAGICHEADERLEN = 4;
 const MILLISECONDSTOSECONDS = 1000;
 
-function useParsepacket(): ParsePacketApi {
+const ParsePacketApiContext = createContext<ParsePacketApiProps>({} as ParsePacketApiProps)
 
-    const [outParsedPkg, setOutParsedPkg] = useState<GalileoParsePacket>(new GalileoParsePacket())
+export function ParsePacketApiProvider({ children }: ParsePacketApiProviderProps) {
 
-    const iterateTags = async (pkg : Packet) => {
+    const [outParsedPkg, setOutParsedPkg] = useState<GalileoParsePacket>(new GalileoParsePacket());
+
+    const iterateTags = async (pkg: Packet) => {
         let outPkg = new GalileoParsePacket();
         const receivedTime = Math.floor(Date.now() / MILLISECONDSTOSECONDS);
         outPkg.receivedTimestamp = receivedTime;
@@ -122,7 +127,7 @@ function useParsepacket(): ParsePacketApi {
     }
 
     const handleRecvPkg = async (packet: Buffer) => {
-        
+
         const data = packet.subarray(MAGICHEADERLEN, packet.length);
         const headerBuf = data.subarray(0, HEADERLEN);
 
@@ -147,10 +152,14 @@ function useParsepacket(): ParsePacketApi {
         setOutParsedPkg(await iterateTags(pkg));
     };
 
-    return {
-        handleRecvPkg,
-        outParsedPkg,
-    }
+    return (
+        <ParsePacketApiContext.Provider value={{outParsedPkg, handleRecvPkg}}>
+            {children}
+        </ParsePacketApiContext.Provider>
+    )
 }
 
-export default useParsepacket;
+export function useParsePacket() {
+    const context = useContext(ParsePacketApiContext);
+    return context;
+}

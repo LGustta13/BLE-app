@@ -14,13 +14,14 @@ import { TrackerData } from "../../components/TrackerData";
 
 // Hooks
 import { useBLE } from "../../hooks/useBLE/useBLE";
+import { useParsePacket } from "../../hooks/useParsePacket/useParsePacket";
 
 // Styles
 import { styles } from "./styles";
-import useParsepacket from "../../hooks/useParsepacket/useParsepacket";
+
 
 const Home = () => {
-  const { handleRecvPkg, outParsedPkg } = useParsepacket();
+  const { outParsedPkg, handleRecvPkg } = useParsePacket();
 
   const {requestPermissions,
     scanForPeripherals,

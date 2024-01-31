@@ -1,5 +1,5 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import GalileoParsePacket from '../hooks/useParsepacket/parse';
+import GalileoParsePacket from '../hooks/useParsePacket/parse';
 import { COLLECTION_GALILEOSKYDATA } from './database';
 
 export async function saveGalileoDataParsed(galileoData: GalileoParsePacket): Promise<void> {
