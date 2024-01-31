@@ -1,11 +1,10 @@
-import { View } from "react-native";
+import { View, Dimensions } from "react-native";
 import { styles } from "./styles";
-import { Canvas, Circle, Group } from "@shopify/react-native-skia";
+import { Canvas, Path, Skia } from "@shopify/react-native-skia";
+
+const { width, height } = Dimensions.get('window');
 
 function CardIcon() {
-    const width = 5;
-    const height = 5;
-    const r = width * 0.33;
 
     return (
         <View style={styles.cardIcon}>
