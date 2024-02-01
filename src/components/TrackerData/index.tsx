@@ -1,9 +1,9 @@
 import { Text, View } from "react-native"
 import { styles } from "./styles"
 
-import GalileoParsePacket from "../../hooks/useParsepacket/parse"
 import { CardDataText } from "../CardDataText"
 import CardIcon from "../CardIcon"
+import GalileoParsePacket from "../../hooks/ParsePacket/parse"
 
 type TrackerDataProps = {
     data: GalileoParsePacket

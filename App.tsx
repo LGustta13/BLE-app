@@ -1,6 +1,6 @@
 import Home from "./src/screens/Home";
-import { BLEApiProvider } from "./src/hooks/useBLE/useBLE";
-import { ParsePacketApiProvider } from "./src/hooks/useParsePacket/useParsePacket";
+import { BLEApiProvider } from "./src/hooks/useBLE";
+import { ParsePacketApiProvider } from "./src/hooks/useParsepacket";
 
 const App = () => {
 

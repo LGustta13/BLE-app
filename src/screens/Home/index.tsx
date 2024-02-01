@@ -13,12 +13,11 @@ import { ButtonConnect } from "../../components/ButtonConnect";
 import { TrackerData } from "../../components/TrackerData";
 
 // Hooks
-import { useBLE } from "../../hooks/useBLE/useBLE";
-import { useParsePacket } from "../../hooks/useParsePacket/useParsePacket";
+import { useBLE } from "../../hooks/useBLE";
 
 // Styles
 import { styles } from "./styles";
-
+import { useParsePacket } from "../../hooks/useParsepacket";
 
 const Home = () => {
   const { outParsedPkg, handleRecvPkg } = useParsePacket();

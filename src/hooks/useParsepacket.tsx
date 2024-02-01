@@ -1,8 +1,15 @@
 import { Buffer } from "buffer";
 import { ReactNode, createContext, useContext, useState } from "react";
 
-import GalileoParsePacket from "./parse";
-import Packet from "./packet";
+import GalileoParsePacket from "./ParsePacket/parse";
+import Packet from "./ParsePacket/packet";
+
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { COLLECTION_GALILEOSKYDATA } from "../configs/database";
+
+type StorageParsePacketProps = {
+    [id: number]: GalileoParsePacket
+}
 
 type ParsePacketApiProps = {
     handleRecvPkg: (packet: Buffer) => void;
@@ -23,6 +30,35 @@ const ParsePacketApiContext = createContext<ParsePacketApiProps>({} as ParsePack
 export function ParsePacketApiProvider({ children }: ParsePacketApiProviderProps) {
 
     const [outParsedPkg, setOutParsedPkg] = useState<GalileoParsePacket>(new GalileoParsePacket());
+
+    async function storeGalileoData(dataToStore: GalileoParsePacket) : Promise<void> {
+        try {
+            const dataInStore = await AsyncStorage.getItem(COLLECTION_GALILEOSKYDATA)
+            const dataInStoreObject = dataInStore ? (JSON.parse(dataInStore) as StorageParsePacketProps) : ({})
+
+            const newDataToStore = {
+                [dataToStore.receivedTimestamp]: dataToStore
+            }
+
+            await AsyncStorage.setItem(COLLECTION_GALILEOSKYDATA, JSON.stringify({
+                ...dataInStoreObject,
+                ...newDataToStore
+            }))
+        } catch(error){
+            throw error;
+        }
+    }
+
+    async function getGalileoData() : Promise<StorageParsePacketProps> {
+        try {
+            const dataInStore = await AsyncStorage.getItem(COLLECTION_GALILEOSKYDATA)
+            const dataInStoreObject = dataInStore ? (JSON.parse(dataInStore) as StorageParsePacketProps) : ({})
+
+            return dataInStoreObject
+        } catch(error){
+            throw error;
+        }
+    }
 
     const iterateTags = async (pkg: Packet) => {
         let outPkg = new GalileoParsePacket();
@@ -123,6 +159,7 @@ export function ParsePacketApiProvider({ children }: ParsePacketApiProviderProps
             }
         }
 
+        await storeGalileoData(outPkg);
         return outPkg;
     }
 
