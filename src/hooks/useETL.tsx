@@ -1,52 +1,56 @@
-type ExtractTransformLoadApi = {
-    foraFaixa: (rpm : number, velocidade: number, pedal: number) => boolean;
-    foraRolamento: (rpm: number, velocidade: number, pedal: number, piloto: boolean) => boolean;
-    paradoLigado: (rpm: number, velocidade: number, pedal: number, piloto: boolean) => boolean;
+import { ReactNode, createContext, useContext, useState } from "react";
+import { useTape } from "./useTape";
+
+type ETLProps = {
+    dentroFaixa: number;
+    rolamento: number;
+    paradoLigado: number;
+    faixaPedal: number;
+    createdAt: number;
 }
 
-const MAX_RPM_FAIXA = 1000;
-const MIN_VELOCIDADE_FAIXA = 5;
-const MIN_POS_PEDAL = 0;
-const MIN_VELOCIDADE_ROLAMENTO = 10;
-const MIN_RPM_ROLAMENTO = 700;
-const MIN_RPM_PARADO = 480;
-const MIN_VELOCIDADE_PARADO = 0;
+type ETLApiProps = {
+    etl: ETLProps
+}
 
-function useETL() : ExtractTransformLoadApi {
+type StorageETLProps = {
+    [id:number]: ETLProps
+}
 
-    const foraFaixa = (rpm : number, velocidade: number, pedal: number) => {
-        let estado = false;
+type ETLProviderProps = {
+    children: ReactNode
+}
 
-        if(rpm > MAX_RPM_FAIXA && velocidade > MIN_VELOCIDADE_FAIXA && pedal > MIN_POS_PEDAL){
-            estado = true;
-        }
+const ETLApiContext = createContext<ETLApiProps>({} as ETLApiProps)
 
-        return estado;
+export function ETLApiProvider({children} : ETLProviderProps) {
+
+    const [etl, setEtl] = useState<ETLProps>({
+        dentroFaixa: 100,
+        rolamento: 100,
+        paradoLigado: 0,
+        faixaPedal: 100,
+        createdAt: Date.now() / 1000
+    });
+    const {getTape} = useTape();
+
+    async function handleRecvETL() {
+
+        const tapeInStore = await getTape();
+
+        
+
+        return 1;
     }
 
-    const foraRolamento = (rpm: number, velocidade: number, pedal: number, piloto: boolean) => {
-        let estado = false;
+    return (
+        <ETLApiContext.Provider value={{handleRecvETL}}>
+            {children}
+        </ETLApiContext.Provider>
+    )
+}
 
-        if(rpm > MIN_RPM_ROLAMENTO && velocidade > MIN_VELOCIDADE_ROLAMENTO && pedal > MIN_POS_PEDAL && piloto == false){
-            estado = true;
-        }
-
-        return estado;
-    }
-
-    const paradoLigado = (rpm: number, velocidade: number) => {
-        let estado = false;
-
-        if(rpm > MIN_RPM_PARADO && velocidade > MIN_VELOCIDADE_PARADO){
-            estado = true;
-        }
-
-        return estado;
-    }
-
-    return {
-        foraFaixa,
-        foraRolamento,
-        paradoLigado,
-    }
+export function useETL() {
+    const context = useContext(ETLApiContext);
+    return context;
 }
