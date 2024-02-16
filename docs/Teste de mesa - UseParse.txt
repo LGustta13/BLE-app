@@ -1,0 +1,81 @@
+ITERAÇÃO 0
+----------
+this.tags = [(03, v.val), (10, v.val), (40, v.val), (41, v.val), (42, v.val), (43, v.val)]
+outPkg.receivedTimestamp = receivedTimestamp
+prevTag = 0
+isSave = false
+
+
+ITERAÇÃO 1
+----------
+curTag = (03, value.val)
+prevTag = 0
+isSave = false
+
+prevTag > curTag.tag && isSave // não passa
+
+outPkg.imei = 862311061315246
+prevTag = 03
+
+
+ITERAÇÃO 2
+----------
+curTag = (10, value.val)
+prevTag = 03
+isSave = false
+
+prevTag > curTag.tag && isSave // não passa
+
+outPkg.packetID = dado;
+prevTag = 10
+
+
+ITERAÇÃO 3
+----------
+curTag = (40, value.val)
+prevTag = 10
+isSave = false
+
+prevTag > curTag.tag && isSave // não passa
+
+outPkg.deviceStatus = dado;
+prevTag = 40
+
+
+ITERAÇÃO 4
+----------
+curTag = (41, value.val)
+prevTag = 40
+isSave = false
+
+prevTag > curTag.tag && isSave // não passa
+
+outPkg.supplyVoltage = dado;
+prevTag = 41
+
+
+ITERAÇÃO 5
+----------
+curTag = (42, value.val)
+prevTag = 41
+isSave = false
+
+prevTag > curTag.tag && isSave // não passa
+
+outPkg.batteryVoltage = dado;
+prevTag = 42
+
+
+ITERAÇÃO 6
+----------
+curTag = (43, value.val)
+prevTag = 42
+isSave = false
+
+prevTag > curTag.tag && isSave // não passa
+
+outPkg.temperature = dado;
+prevTag = 43
+
+
+

@@ -1,0 +1,103 @@
+MAGIC HEADER: 41 A4 12 21 
+
+ENTRA NO DECODE: 01 1e 00 | 03 38 36 32 33 31 31 30 36 31 33 31 35 32 34 36 | 10 00 00 | 40 42 2B | 41 98 5e | 42 80 0e | 43 26 | 20 c0
+
+ITERAÇÃO 0
+----------
+pos = 0
+packetBodyLen = 30
+this.header = 01
+
+pos = 1
+this.length = 30
+
+pos = 3
+
+ITERAÇÃO 1
+----------
+pos = 3 e packetBodyLen = 33
+tag.tag = 03
+pos = 4
+
+tagInfo = TagDesc(15, "string") // Len e Type
+tagVal = 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+tagVal = 38 36 32 33 31 31 30 36 31 33 31 35 32 34 36
+pos = 19
+
+tag = Tag(tag = 03, value = v.val)) // tag e value
+this.tags = [(03, v.val)]
+
+
+ITERAÇÃO 2
+----------
+pos = 19 e packetBodyLen = 33
+tag.tag = 10
+pos = 20
+
+tagInfo = TagDesc(2, "uint") // Len e Type
+tagVal = 00 00
+tagVal = 00 00
+pos = 22
+
+tag = Tag(tag = 10, value = v.val)
+this.tags = [(03, v.val), (10, v.val)]
+
+
+ITERAÇÃO 3
+----------
+pos = 22 e packetBodyLen = 33
+tag.tag = 40
+pos = 23
+
+tagInfo = TagDesc(2, "bitstring") // Len e Type
+tagVal = 00 00
+tagVal = 42 2B
+pos = 25
+
+tag = Tag(tag = 40, value = v.val)
+this.tags = [(03, v.val), (10, v.val), (40, v.val)]
+
+
+ITERAÇÃO 4
+----------
+pos = 25 e packetBodyLen = 33
+tag.tag = 41
+pos = 26
+
+tagInfo = TagDesc(2, "uint") // Len e Type
+tagVal = 00 00
+tagVal = 98 5e
+pos = 28
+
+tag = Tag(tag = 41, value = v.val)
+this.tags = [(03, v.val), (10, v.val), (40, v.val), (41, v.val)]
+
+
+ITERAÇÃO 5
+----------
+pos = 28 e packetBodyLen = 33
+tag.tag = 42
+pos = 29
+
+tagInfo = TagDesc(2, "uint") // Len e Type
+tagVal = 00 00
+tagVal = 80 0e
+pos = 31
+
+tag = Tag(tag = 42, value = v.val)
+this.tags = [(03, v.val), (10, v.val), (40, v.val), (41, v.val), (42, v.val)]
+
+
+ITERAÇÃO 6
+----------
+pos = 31 e packetBodyLen = 33
+tag.tag = 43
+pos = 32
+
+tagInfo = TagDesc(1, "int") // Len e Type
+tagVal = 00
+tagVal = 26
+pos = 33
+
+tag = Tag(tag = 43, value = v.val)
+this.tags = [(03, v.val), (10, v.val), (40, v.val), (41, v.val), (42, v.val), (43, v.val)]
