@@ -36,7 +36,7 @@ O Layout pode ser encontrado no Figma por meio do seguinte [Link](https://www.fi
 
 ## ⏯️ Testes
 - Versão da documentação: 5 (Lollipop)
-- Versão Android testada: 7.1.1 (Nougat) e 13 (Android 13)
+- Versão Android testada: 7.1.1 (Nougat) e 11 (Android 11)
 - Versão API: 25 e 33
 - Versão Expo: 49
 - Versão react-Native: 72
