@@ -16,6 +16,7 @@ type TapeApiProps = {
         velocidade: number, 
         pedal: number, 
         piloto: boolean) => void;
+    getTape: () => Promise<StorageTapeProps>
 }
 
 type StorageTapeProps = {
@@ -73,7 +74,7 @@ export function TapeApiProvider({children} : TapeProviderProps) {
         let paradoLigado = false;
         let faixaPedal = false;
 
-        if (rpm > MAX_RPM_FAIXA && velocidade > MIN_VELOCIDADE_FAIXA && pedal > MIN_POS_PEDAL){
+        if (rpm > MAX_RPM_FAIXA && velocidade > MIN_VELOCIDADE_FAIXA && pedal > 0){
             dentroFaixa = true;
         }
 
@@ -101,7 +102,7 @@ export function TapeApiProvider({children} : TapeProviderProps) {
     }
 
     return (
-        <TapeApiContext.Provider value = {{handleRecvTape}}>
+        <TapeApiContext.Provider value = {{handleRecvTape, getTape}}>
             {children}
         </TapeApiContext.Provider>
     )
