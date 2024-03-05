@@ -116,36 +116,6 @@ ou
 eas build --profile development --platform ios
 ```
 
----
-
-## Anotações
-
-- Características e UUID
-
-```
-Serviço (Retorna da conexão BLE): 0000a441-0000-1000-8000-00805f9b34fb
-SPS ou Read (Documentação): 0783b03e-8535-b5a0-7140-a304d2495cb7
-Server_TX ou Notify (Documentação): 0783b03e-8535-b5a0-7140-a304d2495cb8
-Server_RX ou WriteNoResponse (Documentação): 0783b03e-8535-b5a0-7140-a304d2495cba
-Flow_CTRL ou WriteNoResponse_Notify (Documentação): 0783b03e-8535-b5a0-7140-a304d2495cb9
-```
-
-
-- Formato de mensagem
-```
-/****** Formato da mensagem / 250 bytes *******
-| Byte nº | Length | Value |    Descrição     |
------------------------------------------------
-|   1     |    1   | 0x41  |                  |
-|   2     |    1   | 0xA4  | Cabeçalho da     |
-|   3     |    1   | 0x12  | Mensagem         |
-|   4     |    1   | 0x21  |                  |
-|  ...    |   ...  |       | Pacote principal |
-|   n     |   15   | 0x03  |    IMEI          |
-|  ...    |   ...  |       | Pacote principal |
------------------------------------------------
-```
-
 - Exemplo de mensagem
 
 ```

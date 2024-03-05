@@ -10,21 +10,22 @@ type TapeProps = {
     createdAt: number;
 }
 
-type TapeApiProps = {
-    handleRecvTape: (
-        rpm: number, 
-        velocidade: number, 
-        pedal: number, 
-        piloto: boolean) => void;
-    getTape: () => Promise<StorageTapeProps>
-}
-
 type StorageTapeProps = {
     [id: number]: TapeProps
 }
 
 type TapeProviderProps = {
     children: ReactNode;
+}
+
+type TapeApiProps = {
+    handleRecvTape: (
+        rpm: number, 
+        velocidade: number, 
+        pedal: number, 
+        piloto: boolean) => void;
+    getTape: () => Promise<StorageTapeProps>;
+    deleteTape: () => Promise<void>
 }
 
 const MAX_RPM_FAIXA = 1500;
@@ -39,18 +40,18 @@ const TapeApiContext = createContext<TapeApiProps>({} as TapeApiProps)
 
 export function TapeApiProvider({children} : TapeProviderProps) {
 
-    async function storeTape(dataToStore: TapeProps) : Promise<void> {
+    async function storeTape(tapeToStore: TapeProps) : Promise<void> {
         try{
-            const dataInStore = await AsyncStorage.getItem(COLLECTION_TAPE)
-            const dataInStoreObject = dataInStore ? (JSON.parse(dataInStore) as StorageTapeProps) : ({})
+            const tapeInStore = await AsyncStorage.getItem(COLLECTION_TAPE)
+            const tapeInStoreObject = tapeInStore ? (JSON.parse(tapeInStore) as StorageTapeProps) : ({})
 
-            const newDataToStore = {
-                [dataToStore.createdAt]: dataToStore
+            const newTapeToStore = {
+                [tapeToStore.createdAt]: tapeToStore
             }
 
             await AsyncStorage.setItem(COLLECTION_TAPE, JSON.stringify({
-                ...dataInStoreObject,
-                ...newDataToStore
+                ...tapeInStoreObject,
+                ...newTapeToStore
             }))
         } catch(error) {
             throw error;
@@ -59,50 +60,40 @@ export function TapeApiProvider({children} : TapeProviderProps) {
 
     async function getTape() : Promise<StorageTapeProps> {
         try {
-            const dataInStore = await AsyncStorage.getItem(COLLECTION_TAPE)
-            const dataInStoreObject = dataInStore ? (JSON.parse(dataInStore) as StorageTapeProps) : ({})
+            const tapeInStore = await AsyncStorage.getItem(COLLECTION_TAPE)
+            const tapeInStoreObject = tapeInStore ? (JSON.parse(tapeInStore) as StorageTapeProps) : ({})
 
-            return dataInStoreObject
+            return tapeInStoreObject
         } catch(error){
             throw error;
         }
     }
 
+    async function deleteTape() : Promise<void> {
+        try {
+            await AsyncStorage.removeItem(COLLECTION_TAPE); 
+         } catch (error) {
+             throw error;
+         }
+    }
+
     async function handleRecvTape(rpm: number, velocidade: number, pedal: number, piloto: boolean) {
-        let dentroFaixa = false;
-        let rolamento = false;
-        let paradoLigado = false;
-        let faixaPedal = false;
 
-        if (rpm > MAX_RPM_FAIXA && velocidade > MIN_VELOCIDADE_FAIXA && pedal > 0){
-            dentroFaixa = true;
-        }
+        const newTape = {
+            dentroFaixa: (pedal > 0 && rpm < 1800 && velocidade > 5) ? true : false,
+            rolamento: (pedal > 0 && rpm >= 700 && velocidade > 10 && !piloto) ? true : false,
+            paradoLigado: (rpm > 480 && velocidade == 0) ? true : false,
+            faixaPedal: (pedal > 60 && pedal < 99) ? true : false,
+            createdAt: Date.now(),
+          }
 
-        if (rpm >= MIN_RPM_ROLAMENTO && velocidade >MIN_VELOCIDADE_ROLAMENTO && pedal == 0 && !piloto) {
-            rolamento = true;
-        }
+        // createdAt: Math.floor(Date.now() / 1000)
 
-        if (rpm > MIN_RPM_PARADO && velocidade == 0) {
-            paradoLigado = true
-        }
-
-        if (pedal >= MIN_PEDAL && pedal <= MAX_PEDAL) {
-            faixaPedal = true
-        }
-
-        const tape = {
-            dentroFaixa,
-            rolamento,
-            paradoLigado,
-            faixaPedal,
-            createdAt: Math.floor(Date.now() / 1000)
-        }
-
-        await storeTape(tape);
+        await storeTape(newTape);
     }
 
     return (
-        <TapeApiContext.Provider value = {{handleRecvTape, getTape}}>
+        <TapeApiContext.Provider value = {{handleRecvTape, getTape, deleteTape}}>
             {children}
         </TapeApiContext.Provider>
     )

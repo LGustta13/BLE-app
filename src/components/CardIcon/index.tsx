@@ -1,16 +1,23 @@
-import { View, Dimensions } from "react-native";
+import { View, Text, Dimensions } from "react-native";
 import { styles } from "./styles";
-import { Canvas, Path, Skia } from "@shopify/react-native-skia";
+// import { Canvas, Path, Skia } from "@shopify/react-native-skia";
 
-const { width, height } = Dimensions.get('window');
+type IndicatorProps = {
+  value: number;
+  color: string;
+};
 
-function CardIcon() {
+type CardIconProps = {texto: string} & IndicatorProps
 
-    return (
-        <View style={styles.cardIcon}>
+function CardIcon(props : CardIconProps) {
+  const {texto, value, color} = props
 
-        </View>
-    )
+  return (
+    <View style={styles.cardIcon}>
+      <Text>{texto}</Text>
+      <Text>{value}</Text>
+    </View>
+  );
 }
 
 export default CardIcon;

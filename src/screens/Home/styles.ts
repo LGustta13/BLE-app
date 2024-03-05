@@ -7,6 +7,13 @@ export const styles = StyleSheet.create({
     backgroundColor: theme.colors.bgPrimary,
     paddingHorizontal: 20,
   },
+  buttonsContainer: {
+    gap: 16,
+  },
+  deleteButtonContainer: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+  },
   titleWrapper: {
     flex: 1,
     justifyContent: "center",
