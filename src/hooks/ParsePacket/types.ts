@@ -156,4 +156,36 @@ class BitsTag {
     }
 }
 
-export {UintTag, StringTag, TimeTag, CoordTag, SpeedTag, AccelTag, IntTag, BitsTag}
+class Can8Tag {
+    val: number;
+
+    constructor(val = 0) {
+        this.val = val;
+    }
+
+    parse(val: Buffer) {
+        const size = val.length;
+        if (size !== 1) {
+            throw new Error(`Entrada com tamanho incorreto para tag de CAN8: ${val.toString("hex")}`);
+        } 
+        this.val = val[0]; 
+    }
+}
+
+class Can16Tag {
+    val: number;
+
+    constructor(val = 0) {
+        this.val = val;
+    }
+
+    parse(val: Buffer) {
+        const size = val.length;
+        if (size !== 2) {
+            throw new Error(`Entrada com tamanho incorreto para tag de CAN16: ${val.toString("hex")}`);
+        } 
+        this.val = val.readUInt16LE(0);
+    }
+}
+
+export {UintTag, StringTag, TimeTag, CoordTag, SpeedTag, AccelTag, IntTag, BitsTag, Can8Tag, Can16Tag}

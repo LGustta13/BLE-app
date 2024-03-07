@@ -37,18 +37,16 @@ export function TrackerData({ data }: TrackerDataProps) {
           ) : (
             <CardDataText textDisplay="" value={"..."} />
           )}
-
-          <CardDataText textDisplay="FIRMWARE" value={data.firmwareVersion} />
-          <CardDataText textDisplay="HARDWARE" value={data.hardwareVersion} />
-          <CardDataText textDisplay="CLIENTE" value={data.client} />
-          <CardDataText textDisplay="PACOTE" value={data.packetID} />
-          <CardDataText textDisplay="BATERIA" value={data.batteryVoltage} />
-          <CardDataText textDisplay="FONTE" value={data.supplyVoltage} />
-          <CardDataText textDisplay="TEMPERATURA" value={data.temperature} />
-          <CardDataText textDisplay="IGNIÇÃO" value={0} />
-          <CardDataText textDisplay="ODÔMETRO" value={0} />
-          <CardDataText textDisplay="RPM" value={0} />
-          <CardDataText textDisplay="CONSUMO CAN" value={0} />
+          <CardDataText textDisplay="VELOCIDADE" value={data.can8bitr0} />
+          <CardDataText textDisplay="PILOTO" value={data.can8bitr1} />
+          <CardDataText textDisplay="POSICAO" value={data.can8bitr2} />
+          <CardDataText textDisplay="RPM" value={data.can16bitr0} />
+          <CardDataText textDisplay="SONDA 1" value={data.rs485a} />
+          <CardDataText textDisplay="SONDA 2" value={data.rs485c} />
+          <CardDataText textDisplay="DATA" value={data.navigationTimestamp} />
+          <CardDataText textDisplay="LATITUDE" value={data.latitude} />
+          <CardDataText textDisplay="LONGITUDE" value={data.longitude} />
+          <CardDataText textDisplay="PARTIDA" value={data.inputVoltage3} />
         </View>
 
         <View style={styles.cardIconContainer}>

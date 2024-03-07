@@ -31,35 +31,6 @@ export function ParsePacketApiProvider({ children }: ParsePacketApiProviderProps
 
     const [outParsedPkg, setOutParsedPkg] = useState<GalileoParsePacket>(new GalileoParsePacket());
 
-    // async function storeGalileoData(dataToStore: GalileoParsePacket) : Promise<void> {
-    //     try {
-    //         const dataInStore = await AsyncStorage.getItem(COLLECTION_GALILEOSKYDATA)
-    //         const dataInStoreObject = dataInStore ? (JSON.parse(dataInStore) as StorageParsePacketProps) : ({})
-
-    //         const newDataToStore = {
-    //             [dataToStore.receivedTimestamp]: dataToStore
-    //         }
-
-    //         await AsyncStorage.setItem(COLLECTION_GALILEOSKYDATA, JSON.stringify({
-    //             ...dataInStoreObject,
-    //             ...newDataToStore
-    //         }))
-    //     } catch(error){
-    //         throw error;
-    //     }
-    // }
-
-    // async function getGalileoData() : Promise<StorageParsePacketProps> {
-    //     try {
-    //         const dataInStore = await AsyncStorage.getItem(COLLECTION_GALILEOSKYDATA)
-    //         const dataInStoreObject = dataInStore ? (JSON.parse(dataInStore) as StorageParsePacketProps) : ({})
-
-    //         return dataInStoreObject
-    //     } catch(error){
-    //         throw error;
-    //     }
-    // }
-
     const iterateTags = async (pkg: Packet) => {
         let outPkg = new GalileoParsePacket();
         const receivedTime = Math.floor(Date.now() / MILLISECONDSTOSECONDS);
@@ -155,6 +126,18 @@ export function ParsePacketApiProvider({ children }: ParsePacketApiProviderProps
                     break;
                 case 0x62:
                     outPkg.rs485c = curTag.value.val;
+                    break;
+                case 0xC4:
+                    outPkg.can8bitr0 = curTag.value.val;
+                    break;
+                case 0xC5:
+                    outPkg.can8bitr1 = curTag.value.val;
+                    break;
+                case 0xC6:
+                    outPkg.can8bitr2 = curTag.value.val;
+                    break;    
+                case 0xD6:
+                    outPkg.can16bitr0 = curTag.value.val;
                     break;
             }
         }

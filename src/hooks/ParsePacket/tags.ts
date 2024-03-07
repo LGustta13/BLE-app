@@ -38,6 +38,12 @@ export default class Tag {
             case "bitstring":
                 v = new types.BitsTag();
                 break;
+            case "can8":
+                v = new types.Can8Tag();
+                break;
+            case "can16":
+                v = new types.Can16Tag();
+                break;   
             default:
                 return new Error(`Tipo de dados desconhecido: ${tagType}`);
         }

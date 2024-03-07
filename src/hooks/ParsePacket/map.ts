@@ -37,6 +37,10 @@ const tagsTable = new Map([
     [0x60, new TagDesc(2, "uint")],
     [0x61, new TagDesc(2, "uint")],
     [0x62, new TagDesc(2, "uint")],
+    [0xC4, new TagDesc(1, "can8")],
+    [0xC5, new TagDesc(1, "can8")],
+    [0xC6, new TagDesc(1, "can8")],
+    [0xD6, new TagDesc(2, "can16")],
     // Incluir mais tags se necessário
 ]);
 

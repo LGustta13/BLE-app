@@ -35,7 +35,6 @@ export const styles = StyleSheet.create({
 
   cardIconContainer: {
     flexDirection: "column",
-    gap: 16,
     height: "100%",
     width: "47.5%",
     borderRadius: 10,

@@ -65,7 +65,7 @@ const Home = () => {
 
   useEffect(() => {
     handleRecvPkg(galileoDataBuffer);
-    handleRecvTape(1400, 80, 70, false);
+    handleRecvTape(outParsedPkg.can16bitr0, outParsedPkg.can8bitr0, outParsedPkg.can8bitr2, !!(outParsedPkg.can8bitr1));
     handleRecvETL();
   }, [galileoDataBuffer]);
 

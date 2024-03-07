@@ -16,7 +16,7 @@ export const styles = StyleSheet.create({
         alignItems: "center",
         position: "absolute",
         bottom: 5,
-        left: 5,
+        right: 5,
         height: 50,
         width: 50,
         marginBottom: 5,

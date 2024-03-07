@@ -36,6 +36,10 @@ export default class GalileoParsePacket {
     rs485a: number;
     rs485b: number;
     rs485c: number;
+    can8bitr0: number;
+    can8bitr1: number;
+    can8bitr2: number;
+    can16bitr0: number;
 
     constructor() {
         this.hardwareVersion = 0;
@@ -75,6 +79,10 @@ export default class GalileoParsePacket {
         this.rs485a = 0;
         this.rs485b = 0;
         this.rs485c = 0;
+        this.can8bitr0 = 0;
+        this.can8bitr1 = 0;
+        this.can8bitr2 = 0;
+        this.can16bitr0 = 0;
     }
 
     save() {
