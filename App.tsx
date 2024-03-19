@@ -4,6 +4,9 @@ import { ParsePacketApiProvider } from "./src/hooks/useParsepacket";
 import { TapeApiProvider } from "./src/hooks/useTape";
 import { ETLApiProvider } from "./src/hooks/useETL";
 
+// Teste de layout
+import Content from "./src/screens/Content";
+
 const App = () => {
 
   return (
@@ -11,7 +14,8 @@ const App = () => {
       <ParsePacketApiProvider>
         <TapeApiProvider>
           <ETLApiProvider>
-            <Home />
+            {/* <Home /> */}
+            <Content/>
           </ETLApiProvider>
         </TapeApiProvider>
       </ParsePacketApiProvider>
