@@ -1,27 +1,28 @@
 import { View, Text, ScrollView, SafeAreaView } from "react-native";
 import { styles } from "./styles";
+import Ionicons from '@expo/vector-icons/Ionicons';
 
 function Content() {
   const etls = [
     {
       id: 1,
       description: "velocidade",
-      icon: "",
+      icon: "speedometer-outline",
     },
     {
       id: 2,
       description: "rpm",
-      icon: "",
+      icon: "timer-outline",
     },
     {
       id: 3,
       description: "tanque 1",
-      icon: "",
+      icon: "clipboard-outline",
     },
     {
       id: 4,
       description: "tanque 2",
-      icon: "",
+      icon: "clipboard-outline",
     },
     {
       id: 5,
@@ -55,6 +56,25 @@ function Content() {
     },
   ];
 
+  const timers = [
+    {
+      id: 1,
+      timer: "10 min",
+    },
+    {
+      id: 2,
+      timer: "30 min" 
+    },
+    {
+      id: 3,
+      timer: "1 hora",
+    },
+    {
+      id: 4,
+      timer: "8 horas",
+    },
+  ]
+
   return (
     <SafeAreaView style={styles.container}>
       {/* Header */}
@@ -72,22 +92,38 @@ function Content() {
 
       <View style={styles.content}>
         <View style={styles.menu}>
-          <Text>D</Text>
+          {
+            timers.map((timer) => {
+              return (
+                <View key={timer.id} style={styles.menuCard}>
+                  <Text>{timer.timer}</Text>
+                </View>
+              )
+            })
+          }
         </View>
 
-        <ScrollView showsVerticalScrollIndicator={false}>
-          <View style={styles.map}></View>
+        <View style={styles.scrollview}>
+          <ScrollView showsVerticalScrollIndicator={false}>
+            <View style={styles.map}>
+              
+            </View>
 
-          <View style={styles.cardsList}>
-            {etls.map((etl) => {
-              return (
-                <View key={etl.id} style={styles.card}>
-                  <Text>dfadsd</Text>
-                </View>
-              );
-            })}
-          </View>
-        </ScrollView>
+            <View style={styles.cardsList}>
+              {etls.map((etl) => {
+                return (
+                  <View key={etl.id} style={styles.card}>
+                    <View></View>
+                    <Ionicons name={"speedometer-outline"} size={52} color="black" />
+                    {/* <Text style={styles.value}>0</Text> */}
+                    <Text style={styles.description}>{etl.description.toUpperCase()}</Text>
+                  </View>
+                );
+              })}
+            </View>
+
+          </ScrollView>
+        </View>
       </View>
     </SafeAreaView>
   );

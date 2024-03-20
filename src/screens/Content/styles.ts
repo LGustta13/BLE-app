@@ -32,7 +32,7 @@ export const styles = StyleSheet.create({
       },
     
       buttonDarkMode: {
-        backgroundColor: theme.colors.textPrimary,
+        backgroundColor: theme.colors.dkMode,
         justifyContent: "center",
         alignItems: "center",
         height: 50,
@@ -51,6 +51,7 @@ export const styles = StyleSheet.create({
       },
     
       content: {
+        flex: 1,
         flexDirection: 'column',
         gap: 16,
         paddingHorizontal: 20,
@@ -58,23 +59,57 @@ export const styles = StyleSheet.create({
       },
     
       menu: {
-        backgroundColor: 'red',
-        height: 32,
+        flexDirection: 'row',
+        gap: 8.5,
+        height: 32
+      },
+
+      menuCard: {
+        flex: 1,
+        backgroundColor: theme.colors.bgButton,
+        borderRadius: 8,
+        justifyContent: 'center',
+        alignItems: 'center'
+      },
+
+      scrollview: {
+        flex: 1,
       },
     
       map: {
-        backgroundColor: "yellow",
-        height: 199,
+        backgroundColor: "white",
+        borderRadius: 8,
+        height: 190,
       },
     
       cardsList: {
-        flex: 1,
-        backgroundColor: "purple",
+        marginTop: 16,
+        flexDirection: "row",
+        flexWrap: "wrap",
+        justifyContent: "space-between",
+        alignItems: "center",
+        gap: 16,
+        marginBottom: 16
       },
 
       card: {
-        backgroundColor: "green",
-        width: "45%",
+        backgroundColor: theme.colors.bgButton,
+        borderRadius: 8,
+        width: "47%",
+        height: 103,
+        justifyContent: 'center',
+        alignItems: 'center',
+        paddingHorizontal: 12
+      },
+
+      description: {
+        textAlign: 'center',
+        paddingHorizontal: 10,
+        color: theme.colors.textThird
+      },
+      
+      value: {
+        fontSize: 40
       }
     }
 )
