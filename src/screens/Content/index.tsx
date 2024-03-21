@@ -9,6 +9,8 @@ import { styles } from "./styles";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import Toast from "react-native-root-toast";
 
+import { Canvas, Circle } from "@shopify/react-native-skia";
+
 function Content() {
   const etls = [
     {
@@ -83,7 +85,6 @@ function Content() {
   ];
 
   function handleTimerButtonPress(timer: string) {
-
     Toast.show(`Configurado para ${timer}`, {
       duration: Toast.durations.LONG,
       position: Toast.positions.BOTTOM,
@@ -166,15 +167,12 @@ function Content() {
 
         <View style={styles.scrollview}>
           <ScrollView showsVerticalScrollIndicator={false}>
-            <View style={styles.map}>
-
-            </View>
+            <View style={styles.map}></View>
 
             <View style={styles.cardsList}>
               {etls.map((etl) => {
                 return (
                   <View key={etl.id} style={styles.card}>
-                    <View></View>
                     <Ionicons name={etl.icon} size={52} color="#5D5D5D" />
                     {/* <Text style={styles.value}>0</Text> */}
                     <Text style={styles.description}>

@@ -97,9 +97,9 @@ export const styles = StyleSheet.create({
         borderRadius: 8,
         width: "47%",
         height: 103,
-        justifyContent: 'center',
-        alignItems: 'center',
-        paddingHorizontal: 12
+        paddingHorizontal: 12,
+        justifyContent: "center",
+        alignItems: "center"
       },
 
       description: {
