@@ -24,11 +24,11 @@ export const styles = StyleSheet.create({
     
       buttonDisconnect: {
         backgroundColor: theme.colors.disconnect,
-        justifyContent: "center",
-        alignItems: "center",
         height: 50,
         width: 50,
         borderRadius: 30,
+        alignItems: 'center',
+        justifyContent: 'center'
       },
     
       buttonDarkMode: {

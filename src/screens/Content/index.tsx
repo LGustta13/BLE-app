@@ -1,6 +1,15 @@
-import { View, Text, ScrollView, SafeAreaView } from "react-native";
+import {
+  View,
+  Text,
+  ScrollView,
+  SafeAreaView,
+  TouchableOpacity,
+  Alert,
+  Dimensions,
+} from "react-native";
 import { styles } from "./styles";
-import Ionicons from '@expo/vector-icons/Ionicons';
+import Ionicons from "@expo/vector-icons/Ionicons";
+import Toast from "react-native-root-toast";
 
 function Content() {
   const etls = [
@@ -27,32 +36,32 @@ function Content() {
     {
       id: 5,
       description: "aceleração brusca",
-      icon: "",
+      icon: "chevron-up-circle-outline",
     },
     {
       id: 6,
       description: "freada brusca",
-      icon: "",
+      icon: "chevron-down-circle-outline",
     },
     {
       id: 7,
       description: "dentro faixa",
-      icon: "",
+      icon: "stats-chart-outline",
     },
     {
       id: 8,
       description: "rolamento",
-      icon: "",
+      icon: "stats-chart-outline",
     },
     {
       id: 9,
       description: "parado ligado",
-      icon: "",
+      icon: "stats-chart-outline",
     },
     {
       id: 10,
       description: "posição pedal",
-      icon: "",
+      icon: "stats-chart-outline",
     },
   ];
 
@@ -63,7 +72,7 @@ function Content() {
     },
     {
       id: 2,
-      timer: "30 min" 
+      timer: "30 min",
     },
     {
       id: 3,
@@ -73,15 +82,67 @@ function Content() {
       id: 4,
       timer: "8 horas",
     },
-  ]
+  ];
+
+  function handleTimerButtonPress(timer: string) {
+
+    Toast.show(`Configurado para ${timer}`, {
+      duration: Toast.durations.LONG,
+      position: Toast.positions.BOTTOM,
+      shadow: true,
+      animation: true,
+      hideOnPress: true,
+      delay: 0,
+      backgroundColor: "white",
+      textColor: "black",
+    });
+  }
+
+  function handleDisconnectButton() {
+    Toast.show("Desconectado", {
+      duration: Toast.durations.LONG,
+      position: Toast.positions.BOTTOM,
+      shadow: true,
+      animation: true,
+      hideOnPress: true,
+      delay: 0,
+      backgroundColor: "white",
+      textColor: "black",
+    });
+  }
+
+  function handleDarkMode() {
+    Toast.show("Modo ativado", {
+      duration: Toast.durations.LONG,
+      position: Toast.positions.BOTTOM,
+      shadow: true,
+      animation: true,
+      hideOnPress: true,
+      delay: 0,
+      backgroundColor: "white",
+      textColor: "black",
+    });
+  }
 
   return (
     <SafeAreaView style={styles.container}>
       {/* Header */}
       <View style={styles.header}>
         <View style={styles.buttons}>
-          <View style={styles.buttonDisconnect}></View>
-          <View style={styles.buttonDarkMode}></View>
+          <TouchableOpacity
+            style={styles.buttonDisconnect}
+            activeOpacity={0.6}
+            onPress={handleDisconnectButton}
+          >
+            <Ionicons name={"close-outline"} size={48} color="white" />
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={styles.buttonDarkMode}
+            activeOpacity={0.6}
+            onPress={handleDarkMode}
+          >
+            <Ionicons name={"moon-outline"} size={32} color="white" />
+          </TouchableOpacity>
         </View>
         <View style={styles.headerText}>
           <Text style={styles.text}>LUIS GUSTAVO DE SOUZA OLIVEIRA</Text>
@@ -92,36 +153,37 @@ function Content() {
 
       <View style={styles.content}>
         <View style={styles.menu}>
-          {
-            timers.map((timer) => {
-              return (
-                <View key={timer.id} style={styles.menuCard}>
-                  <Text>{timer.timer}</Text>
-                </View>
-              )
-            })
-          }
+          {timers.map((timer) => {
+            return (
+              <TouchableOpacity
+                key={timer.id}
+                style={styles.menuCard}
+                onPress={() => handleTimerButtonPress(timer.timer)}
+              >
+                <Text>{timer.timer}</Text>
+              </TouchableOpacity>
+            );
+          })}
         </View>
 
         <View style={styles.scrollview}>
           <ScrollView showsVerticalScrollIndicator={false}>
-            <View style={styles.map}>
-              
-            </View>
+            <View style={styles.map}></View>
 
             <View style={styles.cardsList}>
               {etls.map((etl) => {
                 return (
                   <View key={etl.id} style={styles.card}>
                     <View></View>
-                    <Ionicons name={"speedometer-outline"} size={52} color="black" />
+                    <Ionicons name={etl.icon} size={52} color="#5D5D5D" />
                     {/* <Text style={styles.value}>0</Text> */}
-                    <Text style={styles.description}>{etl.description.toUpperCase()}</Text>
+                    <Text style={styles.description}>
+                      {etl.description.toUpperCase()}
+                    </Text>
                   </View>
                 );
               })}
             </View>
-
           </ScrollView>
         </View>
       </View>

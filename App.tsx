@@ -6,20 +6,22 @@ import { ETLApiProvider } from "./src/hooks/useETL";
 
 // Teste de layout
 import Content from "./src/screens/Content";
+import { RootSiblingParent } from 'react-native-root-siblings';
 
 const App = () => {
-
   return (
-    <BLEApiProvider>
-      <ParsePacketApiProvider>
-        <TapeApiProvider>
-          <ETLApiProvider>
-            {/* <Home /> */}
-            <Content/>
-          </ETLApiProvider>
-        </TapeApiProvider>
-      </ParsePacketApiProvider>
-    </BLEApiProvider>
+    <RootSiblingParent>
+      <BLEApiProvider>
+        <ParsePacketApiProvider>
+          <TapeApiProvider>
+            <ETLApiProvider>
+              {/* <Home /> */}
+              <Content />
+            </ETLApiProvider>
+          </TapeApiProvider>
+        </ParsePacketApiProvider>
+      </BLEApiProvider>
+    </RootSiblingParent>
   );
 };
 

@@ -3,7 +3,7 @@ export const theme = {
     colors: {
         bgPrimary: "#D4E5EB",
         textPrimary: "#000000",
-        textThird: "#909090",
+        textThird: "#5D5D5D",
         bgButton: "#BED1DC",
         textSecondary: "#FFFFFF",
         disconnect: "#C07272",
