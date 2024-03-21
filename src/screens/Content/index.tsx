@@ -4,8 +4,6 @@ import {
   ScrollView,
   SafeAreaView,
   TouchableOpacity,
-  Alert,
-  Dimensions,
 } from "react-native";
 import { styles } from "./styles";
 import Ionicons from "@expo/vector-icons/Ionicons";
@@ -168,7 +166,9 @@ function Content() {
 
         <View style={styles.scrollview}>
           <ScrollView showsVerticalScrollIndicator={false}>
-            <View style={styles.map}></View>
+            <View style={styles.map}>
+
+            </View>
 
             <View style={styles.cardsList}>
               {etls.map((etl) => {
