@@ -24,12 +24,13 @@ Esse projeto foi desenvolvido com as seguintes tecnologias:
 A demanda surgiu como uma ideia de desenvolver uma aplicação nativa de identificação de agentes via BLE (Bluetooth Low-Energy). Dessa forma, o usuário com o aplicativo instalado no seu celular Android conseguirá se conectar via BLE com dispositivos GATT, 
 sendo estes responsáveis por enviar pacotes de dados ao celular e apresentá-los em uma interface. A priori, a aplicação deve se conectar com dispositivos da Galileosky.
 
-- Versão BETA da aplicação: [Link](https://expo.dev/accounts/ble-user-gustavo/projects/expo-ble-darwin/builds/c79fbe0b-f4b0-4a18-a9f0-939d202825b2)
+- Documentação no Drive: [Link](https://docs.google.com/document/d/1nYV_zCi5yrMxCPX0nNUoQbNhzapBPrf_XvJfgzM-PQ8/edit?usp=sharing)
+- Versão BETA da aplicação: [Link](https://expo.dev/accounts/desenvolvimento-de-produtos-technolog/projects/expo-ble-darwin/builds/4f7ebe2a-08e7-4197-811c-2ed130453ee9)
 - Documentação Galileosky sobre BLE: [Link](https://base.galileosky.com/articles/#!en-documentation/developing-a-mobile-app-for-interacting-with-galileosky-tracking-devices-via-bluetooth/q/bluetooth/qid/13193/qp/4)
 - Documentação protocolo Galileosky: [Link](https://base.galileosky.com/articles/#!en-documentation/galileosky-protocol/a/h2_1310565463)
 - Github lib React-Native-BLE-plx: [Link](https://github.com/dotintent/react-native-ble-plx)
 - Documentação lib React-Native-BLE-plx: [Link](https://github.com/dotintent/react-native-ble-plx)
-  
+
 ## 🔖 Layout
   
 O Layout pode ser encontrado no Figma por meio do seguinte [Link](https://www.figma.com/file/qgwWujNtdWrZmuNFNuFTFb/BLE-app?type=design&node-id=0%3A1&mode=design&t=t6wQ9OR9xSsCDwY5-1)

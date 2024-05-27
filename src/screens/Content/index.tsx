@@ -9,8 +9,6 @@ import { styles } from "./styles";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import Toast from "react-native-root-toast";
 
-import { Canvas, Circle } from "@shopify/react-native-skia";
-
 function Content() {
   const etls = [
     {

@@ -5,8 +5,8 @@ export const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: theme.colors.bgPrimary,
-    paddingHorizontal: 20,
   },
+  
   buttonsContainer: {
     gap: 16,
   },
@@ -16,8 +16,6 @@ export const styles = StyleSheet.create({
   },
   titleWrapper: {
     flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
   },
   
 });

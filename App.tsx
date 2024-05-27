@@ -15,8 +15,8 @@ const App = () => {
         <ParsePacketApiProvider>
           <TapeApiProvider>
             <ETLApiProvider>
-              {/* <Home /> */}
-              <Content />
+              <Home />
+              {/* <Content /> */}
             </ETLApiProvider>
           </TapeApiProvider>
         </ParsePacketApiProvider>

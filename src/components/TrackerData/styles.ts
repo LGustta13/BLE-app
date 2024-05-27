@@ -2,41 +2,147 @@ import { StyleSheet } from "react-native"
 import { theme } from "../../global/theme"
 
 export const styles = StyleSheet.create({
-  text: {
-    fontSize: 12,
-  },
 
-  cardMapContainer: {
-    height: "30%",
-    width: "100%",
-    borderRadius: 10,
+  header: {
     backgroundColor: theme.colors.bgButton,
-    marginTop: 16,
-  },
-
-  cardDataContainer: {
+    height: 98,
+    paddingHorizontal: 20,
+    paddingTop: 24,
     flexDirection: "row",
-    gap: 16,
-    height: "50%",
-    width: "100%",
-    marginTop: 16,
+    alignItems: "center",
+    justifyContent: "space-between",
   },
 
-  cardData: {
+  buttons: {
+    flexDirection: "row",
+    gap: 8,
+  },
+
+  buttonDisconnect: {
+    backgroundColor: theme.colors.disconnect,
+    height: 50,
+    width: 50,
+    borderRadius: 30,
+    alignItems: 'center',
+    justifyContent: 'center'
+  },
+
+  buttonDarkMode: {
+    backgroundColor: theme.colors.dkMode,
+    justifyContent: "center",
+    alignItems: "center",
+    height: 50,
+    width: 50,
+    marginBottom: 5,
+    borderRadius: 30,
+  },
+
+  headerText: {
     flexDirection: "column",
+    alignItems: "flex-end",
+  },
+
+  text: {
+    fontSize: theme.text.text,
+  },
+
+  content: {
+    flex: 1,
+    flexDirection: 'column',
+    gap: 16,
+    paddingHorizontal: 20,
+    marginTop: 16
+  },
+
+  menu: {
+    flexDirection: 'row',
+    gap: 8.5,
+    height: 32
+  },
+
+  menuCard: {
+    flex: 1,
+    backgroundColor: theme.colors.bgButton,
+    borderRadius: 8,
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
+
+  scrollview: {
+    flex: 1,
+  },
+
+  map: {
+    backgroundColor: "white",
+    borderRadius: 8,
+    height: 190,
+  },
+
+  cardsList: {
+    marginTop: 16,
+    flexDirection: "row",
+    flexWrap: "wrap",
     justifyContent: "space-between",
     alignItems: "center",
-    backgroundColor: theme.colors.bgButton,
-    height: "100%",
-    width: "47.5%",
-    borderRadius: 10,
-    paddingVertical: 8
+    gap: 16,
+    marginBottom: 16
   },
 
-  cardIconContainer: {
-    flexDirection: "column",
-    height: "100%",
-    width: "47.5%",
-    borderRadius: 10,
+  card: {
+    backgroundColor: theme.colors.bgButton,
+    borderRadius: 8,
+    width: "47%",
+    height: 103,
+    paddingHorizontal: 12,
+    justifyContent: "center",
+    alignItems: "center"
   },
-})
+
+  description: {
+    textAlign: 'center',
+    paddingHorizontal: 10,
+    color: "black"
+  },
+  
+  value: {
+    fontSize: 40
+  }
+}
+  // text: {
+  //   fontSize: 12,
+  // },
+
+  // cardMapContainer: {
+  //   height: "30%",
+  //   width: "100%",
+  //   borderRadius: 10,
+  //   backgroundColor: theme.colors.bgButton,
+  //   marginTop: 16,
+  // },
+
+  // cardDataContainer: {
+  //   flexDirection: "row",
+  //   gap: 16,
+  //   height: "50%",
+  //   width: "100%",
+  //   marginTop: 16,
+  // },
+
+  // cardData: {
+  //   flexDirection: "column",
+  //   justifyContent: "space-between",
+  //   alignItems: "center",
+  //   backgroundColor: theme.colors.bgButton,
+  //   height: "100%",
+  //   width: "47.5%",
+  //   borderRadius: 10,
+  //   paddingVertical: 8
+  // },
+
+  // cardIconContainer: {
+  //   flexDirection: "column",
+  //   height: "100%",
+  //   width: "47.5%",
+  //   borderRadius: 10,
+  // },
+)

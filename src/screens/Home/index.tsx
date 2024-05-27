@@ -1,7 +1,11 @@
 // Libs
 import React, { useEffect, useState } from "react";
-import { Alert, Button, SafeAreaView, View } from "react-native";
-import Ionicons from "@expo/vector-icons/Ionicons";
+import {
+  View,
+  SafeAreaView,
+  Alert,
+  Button
+} from "react-native";
 
 // Components
 import { DeviceModal } from "../../components/Modal";
@@ -74,7 +78,6 @@ const Home = () => {
       <View style={styles.titleWrapper}>
         {connectedDevice ? (
           <>
-            <TitleText text={"Dados do coletor"} />
             <TrackerData data={outParsedPkg} />
           </>
         ) : (

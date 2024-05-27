@@ -4,9 +4,6 @@ import { ReactNode, createContext, useContext, useState } from "react";
 import GalileoParsePacket from "./ParsePacket/parse";
 import Packet from "./ParsePacket/packet";
 
-// import AsyncStorage from "@react-native-async-storage/async-storage";
-// import { COLLECTION_GALILEOSKYDATA } from "../configs/database";
-
 type StorageParsePacketProps = {
     [id: number]: GalileoParsePacket
 }
@@ -142,7 +139,6 @@ export function ParsePacketApiProvider({ children }: ParsePacketApiProviderProps
             }
         }
 
-        // await storeGalileoData(outPkg);
         return outPkg;
     }
 
